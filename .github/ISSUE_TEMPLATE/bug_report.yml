@@ -1,0 +1,104 @@
+name: "问题反馈 / Bug report"
+description: "报告计时、通知、交互、兼容性或构建问题 / Report a bug or build issue."
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先查看 README 并搜索已有 Issue，尽量提供可复现的步骤。可使用中文或英文填写。
+        Please read the README and search existing issues first. Reports in Chinese or English are welcome.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "问题范围 / Area"
+      options:
+        - "计时与轮数 / Timer and rounds"
+        - "后台运行与通知 / Background operation and notifications"
+        - "手势与表冠 / Gestures and rotary input"
+        - "触觉反馈 / Haptic feedback"
+        - "设置与状态恢复 / Settings and state restoration"
+        - "界面与翻译 / UI and translations"
+        - "构建 / Build"
+        - "其他 / Other"
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: "应用版本或提交 / App version or commit"
+      description: "填写出现问题的版本；自行构建时可填写提交哈希。 / Identify the affected version or commit for a source build."
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "设备与系统 / Device and system"
+      description: "不知道的项目可填“未知”；仅构建问题可填“不适用”。 / Use “unknown” where needed, or “not applicable” for build-only reports."
+      placeholder: |
+        设备型号 / Device model:
+        Android / Wear OS:
+        固件版本与地区 / Firmware and region:
+        安装来源与 APK 架构 / Install source and APK ABI:
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: "实际表现 / Actual behavior"
+      description: "描述发生了什么，以及是每次发生还是偶发。 / Describe what happened and how often it occurs."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "复现步骤 / Steps to reproduce"
+      description: "从打开应用开始描述；构建问题请提供执行命令。 / Start from opening the app, or provide the command for a build issue."
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "预期表现 / Expected behavior"
+      description: "你期望应用如何运行？ / What did you expect to happen?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: timer_context
+    attributes:
+      label: "计时与权限状态（如适用） / Timer and permission context (if applicable)"
+      description: "计时、后台或提醒问题请补充以下信息；其他问题可留空。 / Useful for timing, background, and reminder issues; otherwise leave blank."
+      placeholder: |
+        阶段、时长、轮数设置 / Phase, durations, and round settings:
+        前台、后台或熄屏 / Foreground, background, or screen off:
+        通知与精确闹钟权限 / Notification and exact alarm access:
+        省电模式或后台限制 / Battery saver or background restrictions:
+        是否经历进程重建或设备重启 / Process recreation or device restart:
+
+  - type: textarea
+    id: build_context
+    attributes:
+      label: "构建环境（如适用） / Build environment (if applicable)"
+      description: "仅构建问题需要填写。 / Complete this for build issues only."
+      placeholder: |
+        电脑系统 / Host operating system:
+        JDK:
+        Android SDK:
+        Gradle / AGP:
+        是否修改构建配置 / Local build configuration changes:
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "日志、截图或补充信息 / Logs, screenshots, or additional context"
+      description: "可拖入截图或录屏；请用 Markdown 代码块粘贴相关日志。 / Attach screenshots or recordings, and use Markdown code blocks for relevant logs."

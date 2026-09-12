@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108" role="img" aria-labelledby="title">
+  <title id="title">WearPomodoro</title>
+  <!-- Exported from app/src/main/res/drawable/ic_launcher_foreground.xml
+       with the background from app/src/main/res/values/ic_launcher_background.xml. -->
+  <circle cx="54" cy="54" r="54" fill="#151F27" />
+  <path id="timer_ring" d="M66,37.2154 A24,24 0,1 1,42,37.2154" fill="none" stroke="#FF745F" stroke-width="7.5" stroke-linecap="round" />
+  <path id="stem" d="M54,32 C51,29 51,25 54,23" fill="none" stroke="#89CAA7" stroke-width="3.5" stroke-linecap="round" />
+  <path id="left_leaf" d="M55,36 C51,29 43,26 37,29 C40,36 47,39 55,36 Z" fill="#89CAA7" />
+  <path id="right_leaf" d="M53,36 C55,29 62,25 70,27 C69,34 61,39 53,36 Z" fill="#B8E8C2" />
+  <path id="clock_hands" d="M54,46 L54,58 L63,63.2" fill="none" stroke="#FFF5E7" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

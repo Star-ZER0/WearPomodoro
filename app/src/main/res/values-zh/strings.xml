@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">腕上番茄钟</string>
+
+    <string name="phase_ready">准备学习</string>
+    <string name="phase_focus">专注学习</string>
+    <string name="phase_short_break">短休息</string>
+    <string name="phase_long_break">长休息</string>
+    <string name="phase_paused">%1$s · 已暂停</string>
+    <string name="timer_progress_description">本轮进度</string>
+    <string name="timer_start_description">开始计时</string>
+    <string name="timer_pause_description">暂停计时</string>
+    <string name="timer_resume_description">继续计时</string>
+    <string name="timer_stop_description">停止计时</string>
+    <string name="round_number">第 %1$d 轮</string>
+    <string name="round_number_of">第 %1$d / %2$d 轮</string>
+    <string name="stop_confirmation_title">停止本轮计时？</string>
+    <string name="stop_confirmation_message">本轮进度和已累计轮数将清零。</string>
+    <string name="action_pause">暂停</string>
+    <string name="action_continue">继续</string>
+    <string name="action_stop">停止</string>
+    <string name="action_confirm_stop">确认停止</string>
+    <string name="action_cancel_stop">取消停止</string>
+    <string name="action_cancel_changes">取消修改</string>
+    <string name="action_save_settings">保存设置</string>
+    <string name="action_open">打开</string>
+    <string name="action_back_to_general_settings">返回通用设置</string>
+
+    <string name="timer_settings_title">计时设置</string>
+    <string name="settings_loading">正在读取已保存的设置…</string>
+    <string name="general_settings_title">通用设置</string>
+    <string name="setting_focus_duration">学习时长</string>
+    <string name="setting_short_break_duration">短休息时长</string>
+    <string name="setting_long_break_duration">长休息时长</string>
+    <string name="setting_long_break_rounds">长休息轮数</string>
+    <string name="long_break_never">总不</string>
+    <string name="long_break_never_summary">总不（不进行长休息）</string>
+    <string name="long_break_never_description">总不，永不进行长休息</string>
+    <string name="unit_hours">小时</string>
+    <string name="unit_minutes">分钟</string>
+    <string name="unit_rounds">轮</string>
+    <string name="setting_editor_title">%1$s · %2$s</string>
+    <string name="duration_minimum_error">时长至少 1 分钟</string>
+    <string name="setting_system_back">系统返回手势</string>
+    <string name="system_back_enabled">允许系统返回操作</string>
+    <string name="system_back_disabled">已拦截系统返回操作</string>
+    <string name="setting_swipe_back">右滑返回</string>
+    <string name="swipe_back_summary">控制应用页面的右滑返回</string>
+    <string name="swipe_back_system_controlled_summary">API36+由“系统返回手势”开关统一控制</string>
+    <string name="system_app_settings_title">系统应用设置</string>
+    <string name="system_app_settings_summary">管理通知、后台运行等</string>
+    <string name="app_version">%1$s · %2$s</string>
+
+    <string name="permissions_title">权限检查</string>
+    <string name="permissions_loading">正在检查权限…</string>
+    <string name="permissions_all_granted">所需权限已开启</string>
+    <string name="permissions_summary">%1$s · %2$s</string>
+    <string name="permissions_refresh">重新检查</string>
+    <string name="permissions_refresh_summary">更新权限状态</string>
+    <string name="permission_status_missing">待开启</string>
+    <string name="permission_status_granted">已开启</string>
+    <string name="permission_status_not_required">当前系统无需申请</string>
+    <string name="permission_status_description">%1$s · %2$s</string>
+    <string name="permission_notifications_title">通知提醒</string>
+    <string name="permission_notifications_description">显示计时通知与到点提醒</string>
+    <string name="permission_exact_alarms_title">精确闹钟</string>
+    <string name="permission_exact_alarms_description">熄屏后也能按时提醒</string>
+    <string name="permission_foreground_service_title">前台服务</string>
+    <string name="permission_foreground_service_description">在后台持续运行计时服务</string>
+    <string name="permission_timer_service_title">计时服务权限</string>
+    <string name="permission_timer_service_description">允许番茄钟使用专用前台服务</string>
+    <string name="permission_boot_title">开机恢复</string>
+    <string name="permission_boot_description">重启后恢复安全的待开始状态</string>
+    <string name="permission_vibrate_title">震动提醒</string>
+    <string name="permission_vibrate_description">允许计时结束时发出震动</string>
+    <string name="permission_wake_lock_title">唤醒锁</string>
+    <string name="permission_wake_lock_description">让到点处理任务正常完成</string>
+    <string name="permission_internal_receiver_title">内部广播保护</string>
+    <string name="permission_internal_receiver_description">限制其他应用发送内部广播</string>
+    <string name="permission_system_description">应用声明的系统权限</string>
+
+    <string name="about_title">关于</string>
+    <string name="about_app_title">关于此应用</string>
+    <string name="author_title">作者</string>
+    <string name="author_avatar_description">%1$s头像</string>
+    <string name="author_tagline">INTP社恐一枚OwQ</string>
+    <string name="about_ai_assistance">此应用由AI辅助编写</string>
+    <string name="personal_website_title">个人主页</string>
+    <string name="project_website_title">GitHub 主页</string>
+    <string name="donation_title">通过微信赞赏</string>
+    <string name="donation_subtitle">我很可爱，请给我钱</string>
+    <string name="donation_qr_description">作者打赏二维码，点按返回关于页面</string>
+    <string name="action_back_to_about">返回关于页面</string>
+    <string name="open_app_settings_error">请在系统设置中打开本应用的设置</string>
+    <string name="no_link_handler_error">未找到可打开链接的应用</string>
+    <string name="open_link_error">无法打开链接</string>
+
+    <string name="timer_channel_name">番茄钟计时</string>
+    <string name="timer_channel_description">显示当前学习或休息剩余时间</string>
+    <string name="reminder_channel_name">阶段提醒</string>
+    <string name="reminder_channel_description">学习和休息开始或结束时主动提醒</string>
+    <string name="notification_focus_title">学习中 · %1$s</string>
+    <string name="notification_ready_text">准备开始学习</string>
+    <string name="notification_running_text">计时进行中</string>
+    <string name="notification_paused_text">已暂停 · %1$s</string>
+    <string name="notification_stop_confirmation">%1$s · 确认停止吗？</string>
+    <string name="notification_short_break_started">学习完成，进入短休息</string>
+    <string name="notification_long_break_started">学习完成，进入长休息</string>
+    <string name="notification_break_finished">休息结束</string>
+    <string name="notification_next_focus">准备开始第 %1$d 轮学习</string>
+
+    <plurals name="duration_minutes">
+        <item quantity="other">%1$d 分钟</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="other">%1$d 小时</item>
+    </plurals>
+    <plurals name="round_count">
+        <item quantity="other">%1$d 轮</item>
+    </plurals>
+    <plurals name="long_break_interval">
+        <item quantity="other">每 %1$d 轮学习后</item>
+    </plurals>
+    <plurals name="permissions_missing_count">
+        <item quantity="other">%1$d 项权限待开启</item>
+    </plurals>
+    <plurals name="permissions_granted_count">
+        <item quantity="other">%1$d 项已开启</item>
+    </plurals>
+    <plurals name="permissions_pending_count">
+        <item quantity="other">%1$d 项待开启</item>
+    </plurals>
+    <plurals name="notification_break_duration">
+        <item quantity="other">休息 %1$d 分钟</item>
+    </plurals>
+</resources>

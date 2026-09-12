@@ -1,0 +1,130 @@
+package cc.star0.wear.pomodoro
+
+import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cc.star0.wear.pomodoro.permissions.AppPermissionReport
+import cc.star0.wear.pomodoro.permissions.PermissionAction
+import cc.star0.wear.pomodoro.permissions.readAppPermissions
+import cc.star0.wear.pomodoro.ui.PomodoroApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class MainActivity : ComponentActivity() {
+    private var permissionReport by mutableStateOf(AppPermissionReport())
+    private var permissionChecksStarted = false
+    private var permissionRefreshJob: Job? = null
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (permissionChecksStarted) refreshPermissions()
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            PomodoroApp(
+                viewModel = viewModel(),
+                permissionReport = permissionReport,
+                onPermissionAction = ::handlePermissionAction,
+                onRefreshPermissions = ::refreshPermissions,
+                onOpenUrl = ::openExternalUrl,
+            )
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // The timer page does not need a full permission report during cold startup.
+        if (permissionChecksStarted) refreshPermissions()
+    }
+
+    private fun refreshPermissions() {
+        permissionChecksStarted = true
+        permissionRefreshJob?.cancel()
+        permissionRefreshJob = lifecycleScope.launch {
+            permissionReport = withContext(Dispatchers.IO) {
+                readAppPermissions(applicationContext)
+            }
+        }
+    }
+
+    private fun handlePermissionAction(action: PermissionAction) {
+        when (action) {
+            PermissionAction.Notifications -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED
+                ) {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    openSettings(
+                        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName),
+                    )
+                } else {
+                    openAppSettings()
+                }
+            }
+            PermissionAction.ExactAlarms -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    openSettings(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, "package:$packageName".toUri()))
+                }
+            }
+            PermissionAction.AppSettings -> openAppSettings()
+        }
+    }
+
+    private fun openSettings(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            openAppSettings()
+        } catch (_: SecurityException) {
+            openAppSettings()
+        }
+    }
+
+    private fun openAppSettings() {
+        try {
+            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.open_app_settings_error, Toast.LENGTH_LONG).show()
+        } catch (_: SecurityException) {
+            Toast.makeText(this, R.string.open_app_settings_error, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun openExternalUrl(url: String) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.no_link_handler_error, Toast.LENGTH_LONG).show()
+        } catch (_: SecurityException) {
+            Toast.makeText(this, R.string.open_link_error, Toast.LENGTH_LONG).show()
+        }
+    }
+}
