@@ -151,7 +151,7 @@ Pushing a new Git tag to GitHub triggers the [release workflow](.github/workflow
 ├── settings.gradle.kts
 ├── README.md
 ├── README_en.md
-└── AGENT.md                       # Development and agent collaboration guide
+└── AGENTS.md                       # Development and agent collaboration guide
 ```
 
 ## Contributing
@@ -160,7 +160,7 @@ Issues and pull requests are welcome. Bug reports should include the device mode
 
 See the [contributing guide](.github/CONTRIBUTING.md) for the process. Choose the bug report or feature request template when opening an issue.
 
-Read [AGENT.md](AGENT.md) before making changes. For haptics plugin changes, also consult its [maintenance guide](miwearhaptics/AGENT.md). Common code validation commands are:
+Read [AGENTS.md](AGENTS.md) before making changes. For haptics plugin changes, also consult its [maintenance guide](miwearhaptics/AGENTS.md). Common code validation commands are:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug :app:lintDebug

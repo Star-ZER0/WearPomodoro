@@ -151,7 +151,7 @@ Release 启用了代码压缩和资源缩减。
 ├── settings.gradle.kts
 ├── README.md
 ├── README_en.md
-└── AGENT.md                       # 开发与代理协作指南
+└── AGENTS.md                       # 开发与代理协作指南
 ```
 
 ## 参与开发
@@ -160,7 +160,7 @@ Release 启用了代码压缩和资源缩减。
 
 具体流程见 [贡献指南](.github/CONTRIBUTING.md)，提交 Issue 时可选择问题反馈或功能建议模板。
 
-修改前请阅读 [AGENT.md](AGENT.md)。修改触觉插件时，同时参考其 [维护指南](miwearhaptics/AGENT.md)。常用代码检查命令为：
+修改前请阅读 [AGENTS.md](AGENTS.md)。修改触觉插件时，同时参考其 [维护指南](miwearhaptics/AGENTS.md)。常用代码检查命令为：
 
 ```powershell
 .\gradlew.bat :app:assembleDebug :app:lintDebug

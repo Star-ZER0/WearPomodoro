@@ -3,7 +3,7 @@
 欢迎改进 WearPomodoro 的计时、设备兼容、交互、翻译和文档。Issue 和 Pull Request 均可使用中文或英文。
 Contributions to timing, device compatibility, interaction, translations, and documentation are welcome. Issues and pull requests may be written in Chinese or English.
 
-项目使用与构建说明见 [中文 README](../README.md) / [English README](../README_en.md)。代码结构和行为约定见 [AGENT.md](../AGENT.md)；修改触觉插件时同时阅读其 [维护指南](../miwearhaptics/AGENT.md)。
+项目使用与构建说明见 [中文 README](../README.md) / [English README](../README_en.md)。代码结构和行为约定见 [AGENTS.md](../AGENTS.md)；修改触觉插件时同时阅读其 [维护指南](../miwearhaptics/AGENTS.md)。
 See the READMEs for usage and build instructions. Consult the linked development guides for architecture, timer behavior, and haptics constraints.
 
 ## 问题与建议 / Issues and suggestions
@@ -37,7 +37,7 @@ macOS / Linux：
 sh ./gradlew :app:assembleDebug :app:lintDebug
 ```
 
-插件、R8 或发布配置的验证命令见 [AGENT.md](../AGENT.md)。涉及计时、通知、返回手势、表冠或触觉时，在相关设备与权限状态下验证，并记录未覆盖的场景。
+插件、R8 或发布配置的验证命令见 [AGENTS.md](../AGENTS.md)。涉及计时、通知、返回手势、表冠或触觉时，在相关设备与权限状态下验证，并记录未覆盖的场景。
 See the development guide for plugin, R8, and release configuration checks. Changes to timing, notifications, back gestures, rotary input, or haptics should be checked on relevant devices and permission states, with any coverage gaps recorded.
 
 当前仓库没有自动化测试源码或 CI 工作流；构建通过不能替代设备行为验证。请如实说明执行的检查，未运行的项目注明原因。

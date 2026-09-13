@@ -2,7 +2,7 @@
 
 本文件供维护项目的开发者和编程代理参考。用户文档见 [README.md](README.md) 与 [README_en.md](README_en.md)。以当前任务要求和实际源码为准，保持修改集中，保留工作区中已有的用户改动。
 
-本指南覆盖仓库根目录和 Android 应用。涉及 `miwearhaptics/` 时，还需阅读其 [AGENT.md](miwearhaptics/AGENT.md)；该目录是独立的 Gradle 插件与运行时库。
+本指南覆盖仓库根目录和 Android 应用。涉及 `miwearhaptics/` 时，还需阅读其 [AGENTS.md](miwearhaptics/AGENTS.md)；该目录是独立的 Gradle 插件与运行时库。
 
 ## 项目定位
 
@@ -87,7 +87,7 @@
 - 应用清单将 `wear-sdk` 声明为可选库；设备 SDK 实现不应打包进 APK。
 - `PomodoroApplication` 在 UI 初始化前设置 `GOOGLE_FIRST`。优先按接口是否可调用选择 Google / 小米实现，不按机型字符串硬编码。
 - 当前仅适配 `getScrollItemFocus`、`getScrollTick`、`getScrollLimit`；SDK 均不可用时返回无反馈结果。阶段提醒的通知振动独立于这些滚动触觉常量。
-- 插件编译目标为 Java 17，纯 Java 运行时保持 Java 8 兼容。更详细的字节码、缓存、回退和 R8 约束见 [插件指南](miwearhaptics/AGENT.md)。
+- 插件编译目标为 Java 17，纯 Java 运行时保持 Java 8 兼容。更详细的字节码、缓存、回退和 R8 约束见 [插件指南](miwearhaptics/AGENTS.md)。
 
 ## 验证与交付
 
