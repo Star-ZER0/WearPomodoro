@@ -44,7 +44,6 @@ import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ProgressIndicatorDefaults
 import androidx.wear.compose.material3.ScreenScaffold
-import androidx.wear.compose.material3.TimeText
 import cc.star0.wear.pomodoro.PomodoroViewModel
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroPhase
@@ -130,7 +129,7 @@ fun TimerContent(
     val rounds = if (ready) settings.focusRoundsBeforeLongBreak else state.effectiveSettings.focusRoundsBeforeLongBreak
     val round = if (ready || state.phase == PomodoroPhase.Focus) state.completedFocusRounds + 1 else state.completedFocusRounds
 
-    ScreenScaffold(contentPadding = PaddingValues(0.dp), timeText = { TimeText() }) { contentPadding ->
+    ScreenScaffold(contentPadding = PaddingValues(0.dp), timeText = { ScreenTimeText() }) { contentPadding ->
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize().padding(contentPadding),
             contentAlignment = Alignment.Center,

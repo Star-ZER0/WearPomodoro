@@ -23,7 +23,7 @@ fun PermissionsScreen(
     onNavigateBack: () -> Unit,
 ) {
     LaunchedEffect(Unit) { onRefresh() }
-    SettingsListLayout(title = stringResource(R.string.permissions_title), onEdgeBack = onNavigateBack) { transformationSpec ->
+    SettingsListLayout(title = stringResource(R.string.permissions_title), onEdgeBack = onNavigateBack) {
         item {
             Text(
                 text = if (report.isLoaded) {
@@ -35,7 +35,7 @@ fun PermissionsScreen(
                 } else {
                     stringResource(R.string.permissions_loading)
                 },
-                modifier = Modifier.fillMaxWidth().transformedContent(this, transformationSpec),
+                modifier = Modifier.fillMaxWidth().transformedContent(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -46,7 +46,6 @@ fun PermissionsScreen(
                 label = stringResource(R.string.permissions_refresh),
                 value = stringResource(R.string.permissions_refresh_summary),
                 onClick = onRefresh,
-                transformationSpec = transformationSpec,
             )
         }
         for (status in listOf(PermissionStatus.Missing, PermissionStatus.Granted, PermissionStatus.NotRequired)) {
@@ -60,7 +59,7 @@ fun PermissionsScreen(
                 item(key = status.name) {
                     Text(
                         text = stringResource(statusLabelRes),
-                        modifier = Modifier.fillMaxWidth().transformedContent(this, transformationSpec),
+                        modifier = Modifier.fillMaxWidth().transformedContent(),
                         style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Center,
                         color = if (status == PermissionStatus.Missing) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -73,7 +72,6 @@ fun PermissionsScreen(
                             value = stringResource(R.string.permission_status_description, stringResource(statusLabelRes), permission.description),
                             onClick = { onPermissionAction(permission.action) },
                             enabled = status != PermissionStatus.NotRequired,
-                            transformationSpec = transformationSpec,
                             colors = if (status == PermissionStatus.Missing) {
                                 ButtonDefaults.filledTonalButtonColors(
                                     containerColor = MaterialTheme.colorScheme.errorContainer,

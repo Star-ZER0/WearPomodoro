@@ -31,11 +31,11 @@ fun AboutScreen(
     val authorName = stringResource(R.string.author_name)
     val personalUrl = stringResource(R.string.personal_website_url)
     val projectUrl = stringResource(R.string.project_website_url)
-    SettingsListLayout(title = stringResource(R.string.about_title), onEdgeBack = onNavigateBack) { transformationSpec ->
+    SettingsListLayout(title = stringResource(R.string.about_title), onEdgeBack = onNavigateBack) {
         item(key = "app") {
             Column(
                 modifier = Modifier.fillMaxWidth()
-                    .transformedContent(this, transformationSpec)
+                    .transformedContent()
                     .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -64,14 +64,13 @@ fun AboutScreen(
                 label = stringResource(R.string.project_website_title),
                 value = stringResource(R.string.project_website_label),
                 onClick = { onOpenUrl(projectUrl) },
-                transformationSpec = transformationSpec,
                 showNavigateNext = true,
             )
         }
         item(key = "author") {
             Column(
                 modifier = Modifier.fillMaxWidth()
-                    .transformedContent(this, transformationSpec)
+                    .transformedContent()
                     .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -105,7 +104,6 @@ fun AboutScreen(
                 label = stringResource(R.string.personal_website_title),
                 value = stringResource(R.string.personal_website_label),
                 onClick = { onOpenUrl(personalUrl) },
-                transformationSpec = transformationSpec,
                 showNavigateNext = true,
             )
         }
@@ -114,7 +112,6 @@ fun AboutScreen(
                 label = stringResource(R.string.donation_title),
                 value = stringResource(R.string.donation_subtitle),
                 onClick = onShowDonationQr,
-                transformationSpec = transformationSpec,
                 showNavigateNext = true,
             )
         }

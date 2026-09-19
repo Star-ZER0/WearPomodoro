@@ -32,6 +32,9 @@
     <string name="timer_settings_title">Timer settings</string>
     <string name="settings_loading">Loading saved settings…</string>
     <string name="general_settings_title">General settings</string>
+    <string name="setting_screen_style">Screen style</string>
+    <string name="screen_style_round">Round</string>
+    <string name="screen_style_square">Square</string>
     <string name="setting_focus_duration">Focus duration</string>
     <string name="setting_short_break_duration">Short break duration</string>
     <string name="setting_long_break_duration">Long break duration</string>

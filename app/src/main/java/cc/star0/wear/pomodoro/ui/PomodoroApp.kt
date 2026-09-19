@@ -1,13 +1,20 @@
 package cc.star0.wear.pomodoro.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -20,8 +27,12 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.material3.HorizontalPagerScaffold
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.TimeText
+import androidx.wear.compose.material3.TimeTextDefaults
 import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
 import cc.star0.wear.pomodoro.PomodoroViewModel
+import cc.star0.wear.pomodoro.model.ScreenStyle
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.permissions.AppPermissionReport
 import cc.star0.wear.pomodoro.permissions.PermissionAction
@@ -40,10 +51,42 @@ private object AboutDestination : NavKey
 private object DonationQrDestination : NavKey
 
 @Serializable
+private object ScreenStyleDestination : NavKey
+
+@Serializable
 private data class SettingEditorDestination(val kind: SettingKind) : NavKey
 
 @Serializable
 enum class SettingKind { Focus, ShortBreak, LongBreak, RoundsBeforeLongBreak }
+
+/** Top time display: curved [TimeText] on round screens, straight centered label on square. */
+@Composable
+internal fun ScreenTimeText() {
+    if (LocalScreenStyle.current == ScreenStyle.Round) {
+        TimeText()
+    } else {
+        val timeSource = TimeTextDefaults.rememberTimeSource(TimeTextDefaults.timeFormat())
+        val timeStyle = TimeTextDefaults.timeTextStyle()
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(TimeTextDefaults.ContentPadding),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Text(
+                text = timeSource.currentTime(),
+                modifier =
+                    Modifier
+                        .background(TimeTextDefaults.backgroundColor(), CircleShape)
+                        .padding(horizontal = 4.dp),
+                style = MaterialTheme.typography.labelSmall,
+                color = timeStyle.color,
+                fontSize = timeStyle.fontSize,
+                fontFamily = timeStyle.fontFamily,
+                fontWeight = timeStyle.fontWeight,
+                maxLines = 1,
+            )
+        }
+    }
+}
 
 @Composable
 fun PomodoroApp(
@@ -61,9 +104,12 @@ fun PomodoroApp(
     } else {
         PomodoroSettings()
     }
-    CompositionLocalProvider(LocalInteractionSettings provides settings) {
+    CompositionLocalProvider(
+        LocalInteractionSettings provides settings,
+        LocalScreenStyle provides settings.screenStyle,
+    ) {
         MaterialTheme(colorScheme = ColorScheme()) {
-            AppScaffold {
+            AppScaffold(timeText = { ScreenTimeText() }) {
                 val backStack = rememberNavBackStack(HomeDestination)
                 val navigateBack: () -> Unit = {
                     if (backStack.size > 1) backStack.removeLastOrNull()
@@ -89,7 +135,7 @@ fun PomodoroApp(
                                     state = pagerState,
                                     modifier = Modifier.fillMaxSize(),
                                 ) { page ->
-                                    AnimatedPage(pageIndex = page, pagerState = pagerState) {
+                                    val pageContent: @Composable () -> Unit = {
                                         when (page) {
                                             0 -> TimerScreen(viewModel)
                                             1 -> SettingsScreen(
@@ -105,8 +151,14 @@ fun PomodoroApp(
                                                 onOpenPermissions = { backStack.add(PermissionsDestination) },
                                                 onOpenAppSettings = { onPermissionAction(PermissionAction.AppSettings) },
                                                 onAbout = { backStack.add(AboutDestination) },
+                                                onScreenStyle = { backStack.add(ScreenStyleDestination) },
                                             )
                                         }
+                                    }
+                                    if (settings.screenStyle == ScreenStyle.Round) {
+                                        AnimatedPage(pageIndex = page, pagerState = pagerState, content = pageContent)
+                                    } else {
+                                        pageContent()
                                     }
                                 }
                             }
@@ -116,6 +168,14 @@ fun PomodoroApp(
                                 report = permissionReport,
                                 onPermissionAction = onPermissionAction,
                                 onRefresh = onRefreshPermissions,
+                                onNavigateBack = navigateBack,
+                            )
+                        }
+                        entry<ScreenStyleDestination> {
+                            ScreenStyleScreen(
+                                settings = settings,
+                                settingsLoaded = settingsLoaded,
+                                onSettingsChange = viewModel::updateSettings,
                                 onNavigateBack = navigateBack,
                             )
                         }

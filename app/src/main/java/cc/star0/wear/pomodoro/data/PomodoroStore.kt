@@ -10,6 +10,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
+import cc.star0.wear.pomodoro.model.ScreenStyle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -27,6 +28,7 @@ class PomodoroStore(context: Context) {
         val roundsBeforeLongBreak = intPreferencesKey("focus_rounds_before_long_break")
         val systemBackGesture = booleanPreferencesKey("system_back_gesture_enabled")
         val composeSwipeBack = booleanPreferencesKey("compose_swipe_back_enabled")
+        val screenStyle = stringPreferencesKey("screen_style")
 
         val phase = stringPreferencesKey("timer_phase")
         val isRunning = booleanPreferencesKey("timer_is_running")
@@ -53,6 +55,7 @@ class PomodoroStore(context: Context) {
             preferences[Keys.roundsBeforeLongBreak] = settings.focusRoundsBeforeLongBreak
             preferences[Keys.systemBackGesture] = settings.systemBackGestureEnabled
             preferences[Keys.composeSwipeBack] = settings.composeSwipeBackEnabled
+            preferences[Keys.screenStyle] = settings.screenStyle.name
         }
     }
 
@@ -67,7 +70,8 @@ class PomodoroStore(context: Context) {
             preferences.contains(Keys.activeLongBreakDuration) &&
             preferences.contains(Keys.activeRoundsBeforeLongBreak)
         ) {
-            PomodoroSettings(
+            // Only timer values are snapshotted; interface preferences use the current settings.
+            defaultSettings.copy(
                 focusDurationMillis = preferences[Keys.activeFocusDuration] ?: defaultSettings.focusDurationMillis,
                 shortBreakDurationMillis = preferences[Keys.activeShortBreakDuration] ?: defaultSettings.shortBreakDurationMillis,
                 longBreakDurationMillis = preferences[Keys.activeLongBreakDuration] ?: defaultSettings.longBreakDurationMillis,
@@ -121,5 +125,7 @@ class PomodoroStore(context: Context) {
         focusRoundsBeforeLongBreak = preferences[Keys.roundsBeforeLongBreak] ?: 4,
         systemBackGestureEnabled = preferences[Keys.systemBackGesture] ?: true,
         composeSwipeBackEnabled = preferences[Keys.composeSwipeBack] ?: true,
+        screenStyle = ScreenStyle.entries.firstOrNull { it.name == preferences[Keys.screenStyle] }
+            ?: ScreenStyle.Round,
     ).sanitized()
 }

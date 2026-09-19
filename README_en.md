@@ -16,6 +16,7 @@ A standalone Pomodoro timer for Android watches, built with Kotlin, Jetpack Comp
 - **Adjustable sessions**: customize focus and break durations, choose a long break interval, or disable long breaks.
 - **Background timing and reminders**: a foreground service and system alarms handle phase changes. The ongoing notification offers pause, continue, and stop actions, with notifications and vibration at phase completion.
 - **Watch interaction**: a circular progress indicator, horizontal pages, scrolling pickers, rotary crown interaction, and configurable back gestures.
+- **Screen style**: choose Round for lists with scaling and morphing using `TransformingLazyColumn`, or Square for standard `LazyColumn` lists.
 - **Local persistence**: DataStore saves settings and timer state for restoration when the app process is recreated.
 - **Languages and haptics**: Chinese and English resources, with a bundled compatibility layer for Google / Xiaomi Wear scrolling haptics.
 
@@ -29,6 +30,7 @@ Swipe between the three home pages: **Timer, Timer settings, and General setting
 | Short break duration | 5 minutes | 1 minute to 23 hours 59 minutes |
 | Long break duration | 15 minutes | 1 minute to 23 hours 59 minutes |
 | Long break interval | Every 4 focus sessions | 2–12 sessions, or Never |
+| Screen style | Round | Round / Square |
 
 ```mermaid
 flowchart LR
@@ -44,7 +46,7 @@ flowchart LR
 - Duration changes apply when you next start a focus session. The current focus session and its break retain the durations saved at its start. Changes to the long break interval immediately affect subsequent break selection.
 - When the app receives the boot broadcast after a device restart, it returns to the ready state, preserving settings and resetting timer progress and rounds.
 
-General settings includes a permission report, a shortcut to system app settings, back gesture options, and an About page. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
+General settings includes screen style, a permission report, a shortcut to system app settings, back gesture options, and an About page. Choose Round or Square in **General settings → Screen style** to immediately switch the lists in Timer settings, General settings, Screen style, Permissions, and About. The choice is saved locally. The timer page and duration / round pickers retain their existing layouts. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
 
 ## Device compatibility
 

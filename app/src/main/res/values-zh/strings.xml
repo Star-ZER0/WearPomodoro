@@ -29,6 +29,9 @@
     <string name="timer_settings_title">计时设置</string>
     <string name="settings_loading">正在读取已保存的设置…</string>
     <string name="general_settings_title">通用设置</string>
+    <string name="setting_screen_style">屏幕样式</string>
+    <string name="screen_style_round">圆屏</string>
+    <string name="screen_style_square">方屏</string>
     <string name="setting_focus_duration">学习时长</string>
     <string name="setting_short_break_duration">短休息时长</string>
     <string name="setting_long_break_duration">长休息时长</string>

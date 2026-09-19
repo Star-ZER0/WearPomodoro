@@ -9,10 +9,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.lazy.transformedHeight
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.permissions.AppPermissionReport
@@ -25,11 +23,24 @@ fun GeneralSettingsScreen(
     onRefreshPermissions: () -> Unit,
     onOpenPermissions: () -> Unit,
     onOpenAppSettings: () -> Unit,
+    onScreenStyle: () -> Unit,
     onAbout: () -> Unit = {},
     settingsLoaded: Boolean = true,
 ) {
     LaunchedEffect(Unit) { onRefreshPermissions() }
-    SettingsListLayout(title = stringResource(R.string.general_settings_title)) { transformationSpec ->
+    SettingsListLayout(
+        title = stringResource(R.string.general_settings_title),
+        screenStyle = settings.screenStyle,
+    ) {
+        item(key = "screen_style") {
+            SettingButton(
+                label = stringResource(R.string.setting_screen_style),
+                value = stringResource(screenStyleTitleRes(settings.screenStyle)),
+                onClick = onScreenStyle,
+                enabled = settingsLoaded,
+                showNavigateNext = true,
+            )
+        }
         item {
             SwitchButton(
                 checked = settings.systemBackGestureEnabled,
@@ -39,9 +50,9 @@ fun GeneralSettingsScreen(
                 secondaryLabel = {
                     Text(stringResource(if (settings.systemBackGestureEnabled) R.string.system_back_enabled else R.string.system_back_disabled))
                 },
-                modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec)
+                modifier = Modifier.fillMaxWidth().transformedHeight()
                     .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                transformation = SurfaceTransformation(transformationSpec),
+                transformation = transformation,
             )
         }
         item {
@@ -56,9 +67,9 @@ fun GeneralSettingsScreen(
                         else R.string.swipe_back_system_controlled_summary,
                     ))
                 },
-                modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec)
+                modifier = Modifier.fillMaxWidth().transformedHeight()
                     .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                transformation = SurfaceTransformation(transformationSpec),
+                transformation = transformation,
             )
         }
         item {
@@ -70,7 +81,6 @@ fun GeneralSettingsScreen(
                     else -> pluralStringResource(R.plurals.permissions_missing_count, permissionReport.missingCount, permissionReport.missingCount)
                 },
                 onClick = onOpenPermissions,
-                transformationSpec = transformationSpec,
             )
         }
         item {
@@ -78,7 +88,6 @@ fun GeneralSettingsScreen(
                 label = stringResource(R.string.system_app_settings_title),
                 value = stringResource(R.string.system_app_settings_summary),
                 onClick = onOpenAppSettings,
-                transformationSpec = transformationSpec,
             )
         }
         item {
@@ -88,7 +97,7 @@ fun GeneralSettingsScreen(
                 } else {
                     stringResource(R.string.app_version, stringResource(R.string.app_name), permissionReport.versionName)
                 },
-                modifier = Modifier.fillMaxWidth().transformedContent(this, transformationSpec),
+                modifier = Modifier.fillMaxWidth().transformedContent(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -99,7 +108,6 @@ fun GeneralSettingsScreen(
                 label = stringResource(R.string.about_app_title),
                 value = stringResource(R.string.author_credit),
                 onClick = onAbout,
-                transformationSpec = transformationSpec,
             )
         }
     }

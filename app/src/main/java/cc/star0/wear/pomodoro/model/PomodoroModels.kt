@@ -8,7 +8,12 @@ enum class PomodoroPhase {
     LongBreak,
 }
 
-/** Timer and navigation settings. Durations are stored in milliseconds. */
+enum class ScreenStyle {
+    Round,
+    Square,
+}
+
+/** Timer and interface settings. Durations are stored in milliseconds. */
 data class PomodoroSettings(
     val focusDurationMillis: Long = 25.minutesInMillis,
     val shortBreakDurationMillis: Long = 5.minutesInMillis,
@@ -16,6 +21,7 @@ data class PomodoroSettings(
     val focusRoundsBeforeLongBreak: Int = 4,
     val systemBackGestureEnabled: Boolean = true,
     val composeSwipeBackEnabled: Boolean = true,
+    val screenStyle: ScreenStyle = ScreenStyle.Round,
 ) {
     fun sanitized(): PomodoroSettings = copy(
         focusDurationMillis = focusDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
