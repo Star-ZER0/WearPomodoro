@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -54,6 +55,9 @@ private object DonationQrDestination : NavKey
 private object ScreenStyleDestination : NavKey
 
 @Serializable
+private object NotificationStyleDestination : NavKey
+
+@Serializable
 private data class SettingEditorDestination(val kind: SettingKind) : NavKey
 
 @Serializable
@@ -95,6 +99,8 @@ fun PomodoroApp(
     onPermissionAction: (PermissionAction) -> Unit,
     onRefreshPermissions: () -> Unit,
     onOpenUrl: (String) -> Unit,
+    openTimerRequested: Boolean,
+    onTimerOpened: () -> Unit,
 ) {
     val settingsLoaded by viewModel.isInitialized.collectAsStateWithLifecycle()
     val settings = if (settingsLoaded) {
@@ -111,6 +117,14 @@ fun PomodoroApp(
         MaterialTheme(colorScheme = ColorScheme()) {
             AppScaffold(timeText = { ScreenTimeText() }) {
                 val backStack = rememberNavBackStack(HomeDestination)
+                val pagerState = rememberPagerState(pageCount = { 3 })
+                LaunchedEffect(openTimerRequested) {
+                    if (openTimerRequested) {
+                        while (backStack.size > 1) backStack.removeLastOrNull()
+                        pagerState.scrollToPage(0)
+                        onTimerOpened()
+                    }
+                }
                 val navigateBack: () -> Unit = {
                     if (backStack.size > 1) backStack.removeLastOrNull()
                 }
@@ -129,7 +143,6 @@ fun PomodoroApp(
                     ),
                     entryProvider = entryProvider {
                         entry<HomeDestination> {
-                            val pagerState = rememberPagerState(pageCount = { 3 })
                             HorizontalPagerScaffold(pagerState = pagerState) {
                                 HorizontalPager(
                                     state = pagerState,
@@ -152,6 +165,7 @@ fun PomodoroApp(
                                                 onOpenAppSettings = { onPermissionAction(PermissionAction.AppSettings) },
                                                 onAbout = { backStack.add(AboutDestination) },
                                                 onScreenStyle = { backStack.add(ScreenStyleDestination) },
+                                                onNotificationStyle = { backStack.add(NotificationStyleDestination) },
                                             )
                                         }
                                     }
@@ -173,6 +187,14 @@ fun PomodoroApp(
                         }
                         entry<ScreenStyleDestination> {
                             ScreenStyleScreen(
+                                settings = settings,
+                                settingsLoaded = settingsLoaded,
+                                onSettingsChange = viewModel::updateSettings,
+                                onNavigateBack = navigateBack,
+                            )
+                        }
+                        entry<NotificationStyleDestination> {
+                            NotificationStyleScreen(
                                 settings = settings,
                                 settingsLoaded = settingsLoaded,
                                 onSettingsChange = viewModel::updateSettings,

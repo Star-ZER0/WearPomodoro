@@ -24,6 +24,7 @@ fun GeneralSettingsScreen(
     onOpenPermissions: () -> Unit,
     onOpenAppSettings: () -> Unit,
     onScreenStyle: () -> Unit,
+    onNotificationStyle: () -> Unit,
     onAbout: () -> Unit = {},
     settingsLoaded: Boolean = true,
 ) {
@@ -32,6 +33,15 @@ fun GeneralSettingsScreen(
         title = stringResource(R.string.general_settings_title),
         screenStyle = settings.screenStyle,
     ) {
+        item(key = "notification_style") {
+            SettingButton(
+                label = stringResource(R.string.setting_notification_style),
+                value = stringResource(notificationStyleTitleRes(settings.notificationStyle)),
+                onClick = onNotificationStyle,
+                enabled = settingsLoaded,
+                showNavigateNext = true,
+            )
+        }
         item(key = "screen_style") {
             SettingButton(
                 label = stringResource(R.string.setting_screen_style),

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="activity_display_exclusivity">Live Updates and Ongoing Activity cannot be used together. Select one notification style. Live Updates require Wear OS 7 or later and system permission; otherwise a standard notification is shown.</string>
+    <string name="setting_notification_style">Notification style</string>
+    <string name="notification_style_standard">Standard notification</string>
+    <string name="setting_ongoing_activity">Ongoing Activity</string>
+    <string name="setting_live_updates">Live Updates</string>
+    <string name="permission_live_updates_description">Allow promoted timer notifications in system settings; requires system support</string>
     <!-- Default/fallback language: English. Chinese translations live in values-zh. -->
     <string name="app_name">WearPomodoro</string>
 
@@ -111,6 +117,8 @@
     <string name="notification_focus_title">Focus · %1$s</string>
     <string name="notification_ready_text">Ready to start focusing</string>
     <string name="notification_running_text">Timer running</string>
+    <!-- Keep the #phase# and #time# placeholders for the Wear Ongoing Activity status. -->
+    <string name="ongoing_activity_status">#phase# · #time#</string>
     <string name="notification_paused_text">Paused · %1$s</string>
     <string name="notification_stop_confirmation">%1$s · Stop timer?</string>
     <string name="notification_short_break_started">Focus complete: short break</string>

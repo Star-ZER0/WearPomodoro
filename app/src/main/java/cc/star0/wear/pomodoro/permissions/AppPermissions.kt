@@ -2,6 +2,7 @@ package cc.star0.wear.pomodoro.permissions
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -11,7 +12,7 @@ import androidx.core.content.ContextCompat
 import cc.star0.wear.pomodoro.R
 
 enum class PermissionStatus { Granted, Missing, NotRequired }
-enum class PermissionAction { Notifications, ExactAlarms, AppSettings }
+enum class PermissionAction { Notifications, LiveUpdates, ExactAlarms, AppSettings }
 
 data class AppPermission(
     val name: String,
@@ -36,9 +37,14 @@ internal fun permissionStatus(
     granted: Boolean,
     notificationsEnabled: Boolean,
     exactAlarmsAllowed: Boolean,
+    promotedNotificationsAllowed: Boolean = false,
 ): PermissionStatus {
     val allowed = when (name) {
         Manifest.permission.POST_NOTIFICATIONS -> notificationsEnabled && (sdk < 33 || granted)
+        Manifest.permission.POST_PROMOTED_NOTIFICATIONS -> {
+            if (sdk < 36) return PermissionStatus.NotRequired
+            notificationsEnabled && promotedNotificationsAllowed
+        }
         Manifest.permission.SCHEDULE_EXACT_ALARM -> {
             if (sdk < 31) return PermissionStatus.NotRequired
             exactAlarmsAllowed
@@ -60,6 +66,8 @@ internal fun permissionStatus(
 fun readAppPermissions(context: Context): AppPermissionReport {
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
     val notificationsEnabled = NotificationManagerCompat.from(context).areNotificationsEnabled()
+    val promotedNotificationsAllowed = Build.VERSION.SDK_INT >= 36 &&
+        context.getSystemService(NotificationManager::class.java)?.canPostPromotedNotifications() == true
     val exactAlarmsAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         context.getSystemService(AlarmManager::class.java)?.canScheduleExactAlarms() == true
     val permissions = packageInfo.requestedPermissions.orEmpty().mapIndexed { index, name ->
@@ -69,6 +77,7 @@ fun readAppPermissions(context: Context): AppPermissionReport {
         } ?: (ContextCompat.checkSelfPermission(context, name) == PackageManager.PERMISSION_GRANTED)
         val textResources = when (name) {
             Manifest.permission.POST_NOTIFICATIONS -> R.string.permission_notifications_title to R.string.permission_notifications_description
+            Manifest.permission.POST_PROMOTED_NOTIFICATIONS -> R.string.setting_live_updates to R.string.permission_live_updates_description
             Manifest.permission.SCHEDULE_EXACT_ALARM -> R.string.permission_exact_alarms_title to R.string.permission_exact_alarms_description
             Manifest.permission.FOREGROUND_SERVICE -> R.string.permission_foreground_service_title to R.string.permission_foreground_service_description
             Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE -> R.string.permission_timer_service_title to R.string.permission_timer_service_description
@@ -97,9 +106,11 @@ fun readAppPermissions(context: Context): AppPermissionReport {
                 granted = granted,
                 notificationsEnabled = notificationsEnabled,
                 exactAlarmsAllowed = exactAlarmsAllowed,
+                promotedNotificationsAllowed = promotedNotificationsAllowed,
             ),
             action = when (name) {
                 Manifest.permission.POST_NOTIFICATIONS -> PermissionAction.Notifications
+                Manifest.permission.POST_PROMOTED_NOTIFICATIONS -> PermissionAction.LiveUpdates
                 Manifest.permission.SCHEDULE_EXACT_ALARM -> PermissionAction.ExactAlarms
                 else -> PermissionAction.AppSettings
             },

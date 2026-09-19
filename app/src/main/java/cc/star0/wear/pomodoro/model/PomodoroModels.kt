@@ -13,6 +13,12 @@ enum class ScreenStyle {
     Square,
 }
 
+enum class NotificationStyle {
+    LiveUpdate,
+    OngoingActivity,
+    Standard,
+}
+
 /** Timer and interface settings. Durations are stored in milliseconds. */
 data class PomodoroSettings(
     val focusDurationMillis: Long = 25.minutesInMillis,
@@ -22,6 +28,7 @@ data class PomodoroSettings(
     val systemBackGestureEnabled: Boolean = true,
     val composeSwipeBackEnabled: Boolean = true,
     val screenStyle: ScreenStyle = ScreenStyle.Round,
+    val notificationStyle: NotificationStyle = NotificationStyle.OngoingActivity,
 ) {
     fun sanitized(): PomodoroSettings = copy(
         focusDurationMillis = focusDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),

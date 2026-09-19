@@ -15,6 +15,8 @@ A standalone Pomodoro timer for Android watches, built with Kotlin, Jetpack Comp
 - **Timer controls**: start, pause, resume, and stop with confirmation; see the remaining time, session progress, and round count.
 - **Adjustable sessions**: customize focus and break durations, choose a long break interval, or disable long breaks.
 - **Background timing and reminders**: a foreground service and system alarms handle phase changes. The ongoing notification offers pause, continue, and stop actions, with notifications and vibration at phase completion.
+- **Ongoing Activity**: supported Wear OS systems show a timer entry on the watch face and the current phase and countdown in the launcher's Recents section. Tap to return directly to the timer page.
+- **Live Updates**: requests promoted timer notifications on supported systems, with a system-rendered countdown, selectable under Notification style.
 - **Watch interaction**: a circular progress indicator, horizontal pages, scrolling pickers, rotary crown interaction, and configurable back gestures.
 - **Screen style**: choose Round for lists with scaling and morphing using `TransformingLazyColumn`, or Square for standard `LazyColumn` lists.
 - **Local persistence**: DataStore saves settings and timer state for restoration when the app process is recreated.
@@ -31,6 +33,7 @@ Swipe between the three home pages: **Timer, Timer settings, and General setting
 | Long break duration | 15 minutes | 1 minute to 23 hours 59 minutes |
 | Long break interval | Every 4 focus sessions | 2–12 sessions, or Never |
 | Screen style | Round | Round / Square |
+| Notification style | Ongoing Activity | Live Updates / Ongoing Activity / Standard notification |
 
 ```mermaid
 flowchart LR
@@ -45,10 +48,13 @@ flowchart LR
 - On the timer page, pause first, then stop and confirm to reset session progress and completed rounds. Stopping from the notification requires a second confirmation tap within 10 seconds.
 - Duration changes apply when you next start a focus session. The current focus session and its break retain the durations saved at its start. Changes to the long break interval immediately affect subsequent break selection.
 - When the app receives the boot broadcast after a device restart, it returns to the ready state, preserving settings and resetting timer progress and rounds.
+- The Ongoing Activity appears during focus and break countdowns. Pausing or finishing a break removes the activity entry; resuming restores it, and confirming stop removes it with the persistent notification. Tapping the activity or timer notification opens the timer page; leaving a settings editor does not save an unconfirmed draft.
 
 General settings includes screen style, a permission report, a shortcut to system app settings, back gesture options, and an About page. Choose Round or Square in **General settings → Screen style** to immediately switch the lists in Timer settings, General settings, Screen style, Permissions, and About. The choice is saved locally. The timer page and duration / round pickers retain their existing layouts. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
 
 ## Device compatibility
+
+**General settings → Notification style** offers three exclusive choices: **Live Updates**, **Ongoing Activity**, and **Standard notification**. Ongoing Activity is the default. Live Updates and Ongoing Activity cannot be used together, avoiding duplicate entries that can crash the system notification panel. Selection is saved and applied immediately without changing session durations; legacy switch values are neither read nor migrated. The first two styles appear only during running focus or break sessions; pausing or entering the ready state restores an ordinary notification, and resuming restores the selected style. Standard notifications retain the countdown, action buttons, and session reminders.
 
 - Designed for Android watches with the `android.hardware.type.watch` device feature. The minimum system requirement is defined by `minSdk` in the [app build configuration](app/build.gradle.kts).
 - Default builds produce `armeabi-v7a`, `arm64-v8a`, and universal APKs. The universal APK contains those two ARM architectures.
@@ -56,13 +62,18 @@ General settings includes screen style, a permission report, a shortcut to syste
 
 The minimum API setting does not establish compatibility with every device or firmware. Scrolling haptics depend on the system Wear SDK and are handled separately from session reminder vibration.
 
+This feature uses the [Wear OS Ongoing Activity API](https://developer.android.com/training/wearables/notifications/ongoing-activity). Entry placement and countdown display depend on system, launcher, and watch face support. Devices without this API still use the ordinary timer notification. The activity requires app notifications and the Pomodoro timer notification channel to be enabled.
+
 ## Permissions and reminders
+
+[Wear OS Live Updates](https://developer.android.com/training/wearables/notifications/live-updates) are available starting with Wear OS 7. Presentation depends on the system, device manufacturer, and system notification settings; selecting Live Updates does not guarantee promotion. If unsupported or disallowed, an ordinary notification is shown; Ongoing Activity can be selected manually. A system chronometer renders the countdown without reposting notifications every second.
 
 Open **General settings → Permissions** to inspect permission status and access the relevant system settings.
 
 | Permission | Purpose and setup |
 | --- | --- |
 | Notifications: `POST_NOTIFICATIONS` | Shows the timer and session reminders. Android 13 / API 33 and later require runtime permission; system notifications must also remain enabled. |
+| Live Updates: `POST_PROMOTED_NOTIFICATIONS` | Declares promotion requests without a runtime permission dialog. On API 36 and later, the permission page checks system access and links to its settings; older systems report it as not required. Display on Wear still requires system support. |
 | Exact alarms: `SCHEDULE_EXACT_ALARM` | Handles phase completion while the screen is off. On Android 12 / API 31 and later, the permission page opens the system special access settings. |
 | Foreground services: `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE` | Runs the timer service. These permissions are declared in the manifest and checked according to the Android version. |
 
@@ -166,9 +177,10 @@ Read [AGENTS.md](AGENTS.md) before making changes. For haptics plugin changes, a
 
 ```powershell
 .\gradlew.bat :app:assembleDebug :app:lintDebug
+.\gradlew.bat :app:testDebugUnitTest
 ```
 
-Use `./gradlew` on macOS / Linux. The repository currently has no automated test sources. Changes to timing, notifications, gestures, or haptics also need validation on target devices. Keep both README languages in sync when features or build instructions change.
+Use `./gradlew` on macOS / Linux. Robolectric tests cover Ongoing Activity notifications, countdowns, phase transitions, and pause/resume behavior. Watch face and launcher display, tapping back to the timer page, and changes to timing, notifications, gestures, or haptics also need validation on target devices. Keep both README languages in sync when features or build instructions change.
 
 ## Support the project
 

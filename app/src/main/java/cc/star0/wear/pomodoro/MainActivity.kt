@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
     private var permissionReport by mutableStateOf(AppPermissionReport())
     private var permissionChecksStarted = false
     private var permissionRefreshJob: Job? = null
+    private var openTimerRequested by mutableStateOf(false)
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        openTimerRequested = savedInstanceState?.getBoolean(STATE_OPEN_TIMER_REQUESTED)
+            ?: (intent?.action == ACTION_OPEN_TIMER)
         setContent {
             PomodoroApp(
                 viewModel = viewModel(),
@@ -46,6 +49,8 @@ class MainActivity : ComponentActivity() {
                 onPermissionAction = ::handlePermissionAction,
                 onRefreshPermissions = ::refreshPermissions,
                 onOpenUrl = ::openExternalUrl,
+                openTimerRequested = openTimerRequested,
+                onTimerOpened = { openTimerRequested = false },
             )
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
@@ -60,6 +65,17 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // The timer page does not need a full permission report during cold startup.
         if (permissionChecksStarted) refreshPermissions()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.action == ACTION_OPEN_TIMER) openTimerRequested = true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(STATE_OPEN_TIMER_REQUESTED, openTimerRequested)
+        super.onSaveInstanceState(outState)
     }
 
     private fun refreshPermissions() {
@@ -94,6 +110,14 @@ class MainActivity : ComponentActivity() {
                     openSettings(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, "package:$packageName".toUri()))
                 }
             }
+            PermissionAction.LiveUpdates -> {
+                if (Build.VERSION.SDK_INT >= 36) {
+                    openSettings(
+                        Intent(Settings.ACTION_APP_NOTIFICATION_PROMOTION_SETTINGS)
+                            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName),
+                    )
+                }
+            }
             PermissionAction.AppSettings -> openAppSettings()
         }
     }
@@ -126,5 +150,10 @@ class MainActivity : ComponentActivity() {
         } catch (_: SecurityException) {
             Toast.makeText(this, R.string.open_link_error, Toast.LENGTH_LONG).show()
         }
+    }
+
+    companion object {
+        const val ACTION_OPEN_TIMER = "cc.star0.wear.pomodoro.action.OPEN_TIMER"
+        private const val STATE_OPEN_TIMER_REQUESTED = "open_timer_requested"
     }
 }

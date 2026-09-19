@@ -18,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -34,7 +35,8 @@ class PomodoroService : Service() {
         super.onCreate()
         startInForeground()
         serviceScope.launch {
-            controller.state.collect { state ->
+            // Display preferences apply immediately, independently of the session duration snapshot.
+            combine(controller.state, controller.settings) { state, _ -> state }.collect { state ->
                 updateNotification(state)
             }
         }
@@ -132,6 +134,7 @@ class PomodoroService : Service() {
             state,
             SystemClock.elapsedRealtime(),
             stopConfirmationPending,
+            settings = controller.settings.value,
         )
         val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE

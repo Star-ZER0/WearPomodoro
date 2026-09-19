@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="activity_display_exclusivity">实况动态与正在进行的活动不能同时开启，请选择一种通知样式。实况动态需要 Wear OS 7 及以上支持并获得系统允许，否则显示普通通知。</string>
+    <string name="setting_notification_style">通知样式</string>
+    <string name="notification_style_standard">普通通知</string>
+    <string name="setting_ongoing_activity">正在进行的活动</string>
+    <string name="setting_live_updates">实况动态</string>
+    <string name="permission_live_updates_description">在系统设置中允许突出显示计时通知；需要系统支持</string>
     <string name="app_name">腕上番茄钟</string>
 
     <string name="phase_ready">准备学习</string>
@@ -105,6 +111,8 @@
     <string name="notification_focus_title">学习中 · %1$s</string>
     <string name="notification_ready_text">准备开始学习</string>
     <string name="notification_running_text">计时进行中</string>
+    <!-- Keep the #phase# and #time# placeholders for the Wear Ongoing Activity status. -->
+    <string name="ongoing_activity_status">#phase# · #time#</string>
     <string name="notification_paused_text">已暂停 · %1$s</string>
     <string name="notification_stop_confirmation">%1$s · 确认停止吗？</string>
     <string name="notification_short_break_started">学习完成，进入短休息</string>

@@ -11,6 +11,7 @@ import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
 import cc.star0.wear.pomodoro.model.ScreenStyle
+import cc.star0.wear.pomodoro.model.NotificationStyle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -29,6 +30,7 @@ class PomodoroStore(context: Context) {
         val systemBackGesture = booleanPreferencesKey("system_back_gesture_enabled")
         val composeSwipeBack = booleanPreferencesKey("compose_swipe_back_enabled")
         val screenStyle = stringPreferencesKey("screen_style")
+        val notificationStyle = stringPreferencesKey("notification_style")
 
         val phase = stringPreferencesKey("timer_phase")
         val isRunning = booleanPreferencesKey("timer_is_running")
@@ -56,6 +58,7 @@ class PomodoroStore(context: Context) {
             preferences[Keys.systemBackGesture] = settings.systemBackGestureEnabled
             preferences[Keys.composeSwipeBack] = settings.composeSwipeBackEnabled
             preferences[Keys.screenStyle] = settings.screenStyle.name
+            preferences[Keys.notificationStyle] = settings.notificationStyle.name
         }
     }
 
@@ -125,6 +128,8 @@ class PomodoroStore(context: Context) {
         focusRoundsBeforeLongBreak = preferences[Keys.roundsBeforeLongBreak] ?: 4,
         systemBackGestureEnabled = preferences[Keys.systemBackGesture] ?: true,
         composeSwipeBackEnabled = preferences[Keys.composeSwipeBack] ?: true,
+        notificationStyle = NotificationStyle.entries.firstOrNull { it.name == preferences[Keys.notificationStyle] }
+            ?: NotificationStyle.OngoingActivity,
         screenStyle = ScreenStyle.entries.firstOrNull { it.name == preferences[Keys.screenStyle] }
             ?: ScreenStyle.Round,
     ).sanitized()

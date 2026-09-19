@@ -112,6 +112,7 @@ dependencies {
     implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.wear.compose.navigation3)
+    implementation(libs.androidx.wear.ongoing)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
 }

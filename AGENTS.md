@@ -99,6 +99,9 @@
 # 应用编译与 Android Lint
 .\gradlew.bat :app:assembleDebug :app:lintDebug
 
+# 通知与正在进行的活动测试
+.\gradlew.bat :app:testDebugUnitTest
+
 # 仅在修改触觉插件或其运行时时执行
 .\gradlew.bat -p miwearhaptics build
 
@@ -108,7 +111,7 @@
 
 macOS / Linux 先按需执行 `chmod +x gradlew`，将入口换为 `./gradlew`。调试产物位于 `app/build/outputs/apk/debug/`，Release 产物位于 `app/build/outputs/apk/release/`，Lint 报告通常位于 `app/build/reports/lint-results-debug.html`。
 
-当前没有自动化测试源码、测试依赖或 CI 工作流。不要把空测试任务或编译通过当作完整行为验证；新增关键逻辑时优先为纯转换、显示计算或权限判定添加有针对性的测试。
+通知的 Robolectric 测试位于 `app/src/test/`，覆盖正在进行的活动数据、倒计时、阶段切换和暂停恢复。不要把单元测试或编译通过当作完整设备行为验证；新增关键逻辑时优先为纯转换、显示计算或权限判定添加有针对性的测试。
 
 根据改动选择手动验证场景：
 
@@ -117,6 +120,7 @@ macOS / Linux 先按需执行 `chmod +x gradlew`，将入口换为 `./gradlew`�
 | 计时 | 开始 / 暂停 / 继续，UI 与通知停止确认，短休息、长休息、禁用长休息，轮数清零 |
 | 设置与恢复 | 最小 / 最大时长，运行中修改设置，冷启动立即打开编辑器，取消草稿，进程重建，设备重启 |
 | 后台与提醒 | 退出界面、熄屏、精确闹钟允许 / 拒绝、通知关闭、暂停后旧回调、前台通知操作 |
+| 正在进行的活动 | 表盘与启动器入口、系统倒计时、暂停移除 / 继续恢复、休息结束和停止清理、冷启动与已有设置页点按返回计时页 |
 | UI 与语言 | 小圆屏、小时级时间、中英文及复数、表冠焦点、API 36 前后的返回开关及弹窗 |
 | 触觉与 Release | Google / 小米接口可用与缺失、R8 后反射、ABI 输出与实际签名安装 |
 

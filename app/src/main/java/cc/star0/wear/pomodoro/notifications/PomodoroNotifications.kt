@@ -12,9 +12,13 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.wear.ongoing.OngoingActivity
+import androidx.wear.ongoing.Status
 import cc.star0.wear.pomodoro.MainActivity
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroPhase
+import cc.star0.wear.pomodoro.model.PomodoroSettings
+import cc.star0.wear.pomodoro.model.NotificationStyle
 import cc.star0.wear.pomodoro.model.PomodoroState
 import cc.star0.wear.pomodoro.text.durationInMinutes
 import cc.star0.wear.pomodoro.text.formatDuration
@@ -57,6 +61,9 @@ object PomodoroNotifications {
         state: PomodoroState,
         nowElapsedMillis: Long,
         stopConfirmationPending: Boolean = false,
+        settings: PomodoroSettings = PomodoroSettings(),
+        canPostLiveUpdates: Boolean = Build.VERSION.SDK_INT >= 37 &&
+            context.getSystemService(NotificationManager::class.java)?.canPostPromotedNotifications() == true,
     ): Notification {
         val remaining = state.remainingMillis(nowElapsedMillis)
         val resources = context.resources
@@ -76,6 +83,7 @@ object PomodoroNotifications {
             context.getString(R.string.notification_paused_text, formatDuration(resources, remaining))
         }
 
+        val timerIntent = contentIntent(context)
         val builder = NotificationCompat.Builder(context, ONGOING_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
@@ -85,9 +93,9 @@ object PomodoroNotifications {
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setSilent(true)
-            .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setContentIntent(contentIntent(context))
+            .setContentIntent(timerIntent)
 
         if (state.isRunning) {
             builder
@@ -111,6 +119,41 @@ object PomodoroNotifications {
             context.getString(if (stopConfirmationPending) R.string.action_confirm_stop else R.string.action_stop),
             servicePendingIntent(context, PomodoroService.ACTION_STOP),
         )
+
+        val deadline = state.endAtElapsedMillis
+        val activeTimer = state.isRunning && state.phase != PomodoroPhase.ReadyToFocus && deadline != null
+        // Wear SysUI can insert the same notification twice when both APIs are attached,
+        // crashing its notification list with a duplicate oa_key. Choose one representation.
+        val useLiveUpdate = activeTimer && settings.notificationStyle == NotificationStyle.LiveUpdate && canPostLiveUpdates
+        builder.setRequestPromotedOngoing(useLiveUpdate)
+        if (activeTimer && settings.notificationStyle == NotificationStyle.OngoingActivity) {
+            val status = Status.Builder()
+                .addTemplate(context.getString(R.string.ongoing_activity_status))
+                .addPart(
+                    "phase",
+                    Status.TextPart(
+                        context.getString(
+                            when (state.phase) {
+                                PomodoroPhase.Focus -> R.string.phase_focus
+                                PomodoroPhase.ShortBreak -> R.string.phase_short_break
+                                PomodoroPhase.LongBreak -> R.string.phase_long_break
+                                PomodoroPhase.ReadyToFocus -> R.string.phase_ready
+                            },
+                        ),
+                    ),
+                )
+                // Wear renders the countdown itself, using the same monotonic deadline as the timer.
+                .addPart("time", Status.TimerPart(requireNotNull(deadline), -1L, state.totalMillis()))
+                .build()
+            OngoingActivity.Builder(context, ONGOING_NOTIFICATION_ID, builder)
+                .setStaticIcon(R.drawable.ic_notification)
+                .setTouchIntent(timerIntent)
+                .setStatus(status)
+                .build()
+                .apply(context)
+        }
+        // Replace the same notification on state changes. A fresh builder drops activity data
+        // while paused or ready; removing the foreground notification also removes the activity.
         return builder.build()
     }
 
@@ -157,6 +200,7 @@ object PomodoroNotifications {
 
     private fun contentIntent(context: Context): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)
+            .setAction(MainActivity.ACTION_OPEN_TIMER)
         return PendingIntent.getActivity(
             context,
             10,
