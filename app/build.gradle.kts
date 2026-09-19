@@ -33,8 +33,8 @@ android {
         applicationId = "cc.star0.wear.pomodoro"
         minSdk = 25
         targetSdk = 37
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.3.0"
         ndk {
             //noinspection ChromeOsAbiSupport
             abiFilters += listOf("armeabi-v7a", "arm64-v8a")
