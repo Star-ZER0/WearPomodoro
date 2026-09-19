@@ -4,6 +4,10 @@
     android:height="24dp"
     android:viewportWidth="72"
     android:viewportHeight="72">
+    <path
+        android:name="background"
+        android:fillColor="#151F27"
+        android:pathData="M36,0 A36,36 0,1 1,36,72 A36,36 0,1 1,36,0 Z" />
     <group android:translateX="-18" android:translateY="-18">
         <path
             android:name="timer_ring"
