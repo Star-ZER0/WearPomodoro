@@ -53,6 +53,7 @@ import cc.star0.wear.pomodoro.text.formatDuration
 import cc.star0.wear.pomodoro.text.formatRoundLabel
 import cc.star0.wear.pomodoro.timer.PomodoroService
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -60,8 +61,12 @@ fun TimerScreen(viewModel: PomodoroViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    LaunchedEffect(state.isRunning) {
-        if (state.isRunning) PomodoroService.ensureRunning(context.applicationContext)
+    LaunchedEffect(viewModel) {
+        viewModel.isInitialized.first { it }
+        // Restore once when this screen enters composition, not after every start/resume command.
+        if (viewModel.state.value.phase != PomodoroPhase.ReadyToFocus || viewModel.state.value.isRunning) {
+            PomodoroService.ensureRunning(context.applicationContext)
+        }
     }
     TimerContent(
         state = state,

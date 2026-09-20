@@ -28,8 +28,22 @@ data class PomodoroSettings(
     val systemBackGestureEnabled: Boolean = true,
     val composeSwipeBackEnabled: Boolean = true,
     val screenStyle: ScreenStyle = ScreenStyle.Round,
-    val notificationStyle: NotificationStyle = NotificationStyle.OngoingActivity,
+    val liveUpdateNotificationEnabled: Boolean = false,
+    val ongoingActivityNotificationEnabled: Boolean = true,
+    val standardNotificationEnabled: Boolean = false,
 ) {
+    fun isNotificationEnabled(style: NotificationStyle): Boolean = when (style) {
+        NotificationStyle.LiveUpdate -> liveUpdateNotificationEnabled
+        NotificationStyle.OngoingActivity -> ongoingActivityNotificationEnabled
+        NotificationStyle.Standard -> standardNotificationEnabled
+    }
+
+    fun withNotificationEnabled(style: NotificationStyle, enabled: Boolean): PomodoroSettings = when (style) {
+        NotificationStyle.LiveUpdate -> copy(liveUpdateNotificationEnabled = enabled)
+        NotificationStyle.OngoingActivity -> copy(ongoingActivityNotificationEnabled = enabled)
+        NotificationStyle.Standard -> copy(standardNotificationEnabled = enabled)
+    }
+
     fun sanitized(): PomodoroSettings = copy(
         focusDurationMillis = focusDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
         shortBreakDurationMillis = shortBreakDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
@@ -138,6 +152,8 @@ object PomodoroEngine {
         nowElapsedMillis: Long,
     ): PomodoroState? {
         if (!state.isRunning) return null
+        val deadline = state.endAtElapsedMillis ?: return null
+        if (nowElapsedMillis < deadline) return null
         val settings = state.effectiveSettings
         return when (state.phase) {
             PomodoroPhase.ReadyToFocus -> null

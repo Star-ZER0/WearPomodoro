@@ -36,7 +36,7 @@ fun GeneralSettingsScreen(
         item(key = "notification_style") {
             SettingButton(
                 label = stringResource(R.string.setting_notification_style),
-                value = stringResource(notificationStyleTitleRes(settings.notificationStyle)),
+                value = stringResource(R.string.notification_styles_summary),
                 onClick = onNotificationStyle,
                 enabled = settingsLoaded,
                 showNavigateNext = true,

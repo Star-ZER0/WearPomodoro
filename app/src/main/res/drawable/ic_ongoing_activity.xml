@@ -6,34 +6,34 @@
     android:viewportHeight="72">
     <group android:translateX="-18" android:translateY="-18">
         <path
-            android:name="timer_ring"
             android:fillColor="#00000000"
-            android:strokeColor="@color/notification_icon"
+            android:strokeColor="#FFFFFFFF"
             android:strokeWidth="7.5"
             android:strokeLineCap="round"
             android:pathData="M66,37.2154 A24,24 0,1 1,42,37.2154" />
         <path
-            android:name="stem"
             android:fillColor="#00000000"
-            android:strokeColor="@color/notification_icon"
+            android:strokeColor="#FFFFFFFF"
             android:strokeWidth="3.5"
             android:strokeLineCap="round"
             android:pathData="M54,32 C51,29 51,25 54,23" />
         <path
-            android:name="left_leaf"
-            android:fillColor="@color/notification_icon"
+            android:fillColor="#FFFFFFFF"
             android:pathData="M55,36 C51,29 43,26 37,29 C40,36 47,39 55,36 Z" />
         <path
-            android:name="right_leaf"
-            android:fillColor="@color/notification_icon"
+            android:fillColor="#FFFFFFFF"
             android:pathData="M53,36 C55,29 62,25 70,27 C69,34 61,39 53,36 Z" />
-        <path
+        <group
             android:name="clock_hands"
-            android:fillColor="#00000000"
-            android:strokeColor="@color/notification_icon"
-            android:strokeWidth="4.5"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round"
-            android:pathData="M54,46 L54,58 L63,63.2" />
+            android:pivotX="54"
+            android:pivotY="58">
+            <path
+                android:fillColor="#00000000"
+                android:strokeColor="#FFFFFFFF"
+                android:strokeWidth="4.5"
+                android:strokeLineCap="round"
+                android:strokeLineJoin="round"
+                android:pathData="M54,46 L54,58 L63,63.2" />
+        </group>
     </group>
 </vector>

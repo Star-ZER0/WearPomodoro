@@ -15,8 +15,8 @@ A standalone Pomodoro timer for Android watches, built with Kotlin, Jetpack Comp
 - **Timer controls**: start, pause, resume, and stop with confirmation; see the remaining time, session progress, and round count.
 - **Adjustable sessions**: customize focus and break durations, choose a long break interval, or disable long breaks.
 - **Background timing and reminders**: a foreground service and system alarms handle phase changes. The ongoing notification offers pause, continue, and stop actions, with notifications and vibration at phase completion.
-- **Ongoing Activity**: supported Wear OS systems show a timer entry on the watch face and the current phase and countdown in the launcher's Recents section. Tap to return directly to the timer page.
-- **Live Updates**: requests promoted timer notifications on supported systems, with a system-rendered countdown, selectable under Notification style.
+- **Ongoing Activity**: supported Wear OS systems show a timer entry on the watch face, with an animated icon in active mode and a static icon in ambient mode. The launcher's Recents section shows the current phase and countdown. Tap to return directly to the timer page.
+- **Live Updates**: requests promoted timer notifications on supported systems, with a system-rendered countdown. Live Updates, Ongoing Activity, and standard notifications each have a separate channel and switch.
 - **Watch interaction**: a circular progress indicator, horizontal pages, scrolling pickers, rotary crown interaction, and configurable back gestures.
 - **Screen style**: choose Round for lists with scaling and morphing using `TransformingLazyColumn`, or Square for standard `LazyColumn` lists.
 - **Local persistence**: DataStore saves settings and timer state for restoration when the app process is recreated.
@@ -33,7 +33,7 @@ Swipe between the three home pages: **Timer, Timer settings, and General setting
 | Long break duration | 15 minutes | 1 minute to 23 hours 59 minutes |
 | Long break interval | Every 4 focus sessions | 2–12 sessions, or Never |
 | Screen style | Round | Round / Square |
-| Notification style | Ongoing Activity | Live Updates / Ongoing Activity / Standard notification |
+| Notification style | Only Ongoing Activity enabled | Independent switches for Live Updates / Ongoing Activity / Standard notification |
 
 ```mermaid
 flowchart LR
@@ -54,7 +54,11 @@ General settings includes screen style, a permission report, a shortcut to syste
 
 ## Device compatibility
 
-**General settings → Notification style** offers three exclusive choices: **Live Updates**, **Ongoing Activity**, and **Standard notification**. Ongoing Activity is the default. Live Updates and Ongoing Activity cannot be used together, avoiding duplicate entries that can crash the system notification panel. Selection is saved and applied immediately without changing session durations; legacy switch values are neither read nor migrated. The first two styles appear only during running focus or break sessions; pausing or entering the ready state restores an ordinary notification, and resuming restores the selected style. Standard notifications retain the countdown, action buttons, and session reminders.
+**General settings → Notification style** offers three independent switches: **Live Updates**, **Ongoing Activity**, and **Standard notification**. Only Ongoing Activity is enabled by default. Each display uses a different notification ID and a system channel with the matching name. Enabling multiple displays posts separate notifications; a single notification never carries both Live Update and Ongoing Activity data. Switches are saved and applied immediately without changing session durations; legacy single-choice and switch values are neither read nor migrated.
+
+The first two displays include activity data only during running focus or break sessions. Pausing or entering the ready state cancels the Ongoing Activity notification and turns Live Updates into an ordinary timer notification in its channel; resuming restores the activity. When only Ongoing Activity is enabled, the Standard notification channel retains continue and stop controls while paused. If all three switches are off, a basic service notification remains in the Standard notification channel while the timer service runs. Confirming stop removes all timer notifications. Session reminders use their own Session reminders channel and are independent of these switches.
+
+All three channels share the current phase, countdown, and stop confirmation state: running sessions offer Pause, paused sessions show a fixed remaining time and Continue, and completed breaks show the ready state and Start. Reopening the app restores notifications for running or paused sessions; returning from system settings rechecks notification access and channels. Wall-clock changes only correct notification display times, leaving the monotonic timer deadline unchanged. Late or duplicate alarms cannot end the next phase early, and the 10-second notification stop confirmation window includes device sleep.
 
 - Designed for Android watches with the `android.hardware.type.watch` device feature. The minimum system requirement is defined by `minSdk` in the [app build configuration](app/build.gradle.kts).
 - Default builds produce `armeabi-v7a`, `arm64-v8a`, and universal APKs. The universal APK contains those two ARM architectures.
@@ -62,11 +66,11 @@ General settings includes screen style, a permission report, a shortcut to syste
 
 The minimum API setting does not establish compatibility with every device or firmware. Scrolling haptics depend on the system Wear SDK and are handled separately from session reminder vibration.
 
-This feature uses the [Wear OS Ongoing Activity API](https://developer.android.com/training/wearables/notifications/ongoing-activity). Entry placement and countdown display depend on system, launcher, and watch face support. Devices without this API still use the ordinary timer notification. The activity requires app notifications and the Pomodoro timer notification channel to be enabled.
+This feature uses the [Wear OS Ongoing Activity API](https://developer.android.com/training/wearables/notifications/ongoing-activity). Entry placement, animation, and countdown display depend on system, launcher, and watch face support. The activity provides monochrome icons with transparent backgrounds and an accessible description for returning to the timer. Its system-rendered countdown uses the same monotonic deadline as the app. Phase changes update the same notification ID; pausing, disabling the switch, or finishing cancels the activity notification to clear cached system entries. Unchanged state is not reposted, avoiding updates being dropped by notification rate limits. Devices without this API still use the ordinary timer notification. The activity requires app notifications and the Ongoing Activity channel to be enabled.
 
 ## Permissions and reminders
 
-[Wear OS Live Updates](https://developer.android.com/training/wearables/notifications/live-updates) are available starting with Wear OS 7. Presentation depends on the system, device manufacturer, and system notification settings; selecting Live Updates does not guarantee promotion. If unsupported or disallowed, an ordinary notification is shown; Ongoing Activity can be selected manually. A system chronometer renders the countdown without reposting notifications every second.
+[Wear OS Live Updates](https://developer.android.com/training/wearables/notifications/live-updates) are available starting with Wear OS 7. Presentation depends on the system, device manufacturer, and system notification settings; enabling Live Updates does not guarantee promotion. If unsupported or disallowed, its channel shows an ordinary notification; Ongoing Activity can be enabled independently. A system chronometer renders the countdown without reposting notifications every second.
 
 Open **General settings → Permissions** to inspect permission status and access the relevant system settings.
 
@@ -180,7 +184,7 @@ Read [AGENTS.md](AGENTS.md) before making changes. For haptics plugin changes, a
 .\gradlew.bat :app:testDebugUnitTest
 ```
 
-Use `./gradlew` on macOS / Linux. Robolectric tests cover Ongoing Activity notifications, countdowns, phase transitions, and pause/resume behavior. Watch face and launcher display, tapping back to the timer page, and changes to timing, notifications, gestures, or haptics also need validation on target devices. Keep both README languages in sync when features or build instructions change.
+Use `./gradlew` on macOS / Linux. Robolectric tests cover notification switch combinations and persistence, separate channels and activity data, icon resources, countdowns, phase transitions, pause/resume behavior, and notification cleanup. Watch face and launcher display, tapping back to the timer page, and changes to timing, notifications, gestures, or haptics also need validation on target devices. Keep both README languages in sync when features or build instructions change.
 
 ## Support the project
 

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="activity_display_exclusivity">Live Updates and Ongoing Activity cannot be used together. Select one notification style. Live Updates require Wear OS 7 or later and system permission; otherwise a standard notification is shown.</string>
+    <string name="notification_styles_summary">Manage three independent displays</string>
+    <string name="notification_channels_summary">Each display has its own notification channel and can be enabled independently. If all are off, a basic service notification remains while the timer service runs. Session reminders use a separate channel.</string>
+    <string name="notification_live_updates_summary">Promoted countdown on Wear OS 7 or later when allowed by the system; otherwise shown as a standard notification.</string>
+    <string name="notification_ongoing_activity_summary">Watch face shortcut and launcher countdown while running. Pausing removes the activity; resuming restores it.</string>
+    <string name="notification_standard_summary">Timer notification with pause, continue and stop controls.</string>
+    <string name="timer_service_notification">Timer service is running</string>
+    <string name="ongoing_activity_open_timer">Open Pomodoro timer</string>
     <string name="setting_notification_style">Notification style</string>
     <string name="notification_style_standard">Standard notification</string>
     <string name="setting_ongoing_activity">Ongoing Activity</string>
@@ -26,6 +32,7 @@
     <string name="stop_confirmation_message">Session progress and completed rounds will be reset.</string>
     <string name="action_pause">Pause</string>
     <string name="action_continue">Continue</string>
+    <string name="action_start">Start</string>
     <string name="action_stop">Stop</string>
     <string name="action_confirm_stop">Confirm stop</string>
     <string name="action_cancel_stop">Cancel stop</string>
@@ -110,7 +117,6 @@
     <string name="open_link_error">Unable to open this link.</string>
 
     <!-- Notifications. -->
-    <string name="timer_channel_name">Pomodoro timer</string>
     <string name="timer_channel_description">Show the remaining focus or break time</string>
     <string name="reminder_channel_name">Session reminders</string>
     <string name="reminder_channel_description">Remind you when focus sessions and breaks start or end</string>

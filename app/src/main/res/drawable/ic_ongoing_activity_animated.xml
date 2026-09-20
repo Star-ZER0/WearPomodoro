@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_ongoing_activity">
+    <target
+        android:name="clock_hands"
+        android:animation="@animator/ongoing_activity_clock_rotation" />
+</animated-vector>

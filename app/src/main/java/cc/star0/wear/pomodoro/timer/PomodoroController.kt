@@ -9,6 +9,7 @@ import android.os.SystemClock
 import androidx.core.content.getSystemService
 import cc.star0.wear.pomodoro.data.PomodoroStore
 import cc.star0.wear.pomodoro.model.PomodoroEngine
+import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
 import cc.star0.wear.pomodoro.notifications.PomodoroNotifications
@@ -68,7 +69,7 @@ class PomodoroController(
     }
 
     fun startFocus() = transition {
-        if (it.isRunning) return@transition it
+        if (it.isRunning || it.phase != PomodoroPhase.ReadyToFocus) return@transition it
         val settings = _settings.value
         PomodoroEngine.startFocus(it, settings, SystemClock.elapsedRealtime())
     }

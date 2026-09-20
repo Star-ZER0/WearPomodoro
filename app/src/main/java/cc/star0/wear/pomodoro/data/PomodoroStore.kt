@@ -7,11 +7,12 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
 import cc.star0.wear.pomodoro.model.ScreenStyle
-import cc.star0.wear.pomodoro.model.NotificationStyle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -19,8 +20,8 @@ import kotlinx.coroutines.flow.map
 private val Context.pomodoroDataStore by preferencesDataStore(name = "pomodoro")
 
 /** Persists settings and timer state so the timer survives process death. */
-class PomodoroStore(context: Context) {
-    private val dataStore = context.pomodoroDataStore
+class PomodoroStore internal constructor(private val dataStore: DataStore<Preferences>) {
+    constructor(context: Context) : this(context.pomodoroDataStore)
 
     private object Keys {
         val focusDuration = longPreferencesKey("focus_duration_millis")
@@ -30,7 +31,9 @@ class PomodoroStore(context: Context) {
         val systemBackGesture = booleanPreferencesKey("system_back_gesture_enabled")
         val composeSwipeBack = booleanPreferencesKey("compose_swipe_back_enabled")
         val screenStyle = stringPreferencesKey("screen_style")
-        val notificationStyle = stringPreferencesKey("notification_style")
+        val liveUpdateNotification = booleanPreferencesKey("live_update_notification_enabled")
+        val ongoingActivityNotification = booleanPreferencesKey("ongoing_activity_notification_enabled")
+        val standardNotification = booleanPreferencesKey("standard_notification_enabled")
 
         val phase = stringPreferencesKey("timer_phase")
         val isRunning = booleanPreferencesKey("timer_is_running")
@@ -58,7 +61,9 @@ class PomodoroStore(context: Context) {
             preferences[Keys.systemBackGesture] = settings.systemBackGestureEnabled
             preferences[Keys.composeSwipeBack] = settings.composeSwipeBackEnabled
             preferences[Keys.screenStyle] = settings.screenStyle.name
-            preferences[Keys.notificationStyle] = settings.notificationStyle.name
+            preferences[Keys.liveUpdateNotification] = settings.liveUpdateNotificationEnabled
+            preferences[Keys.ongoingActivityNotification] = settings.ongoingActivityNotificationEnabled
+            preferences[Keys.standardNotification] = settings.standardNotificationEnabled
         }
     }
 
@@ -128,8 +133,9 @@ class PomodoroStore(context: Context) {
         focusRoundsBeforeLongBreak = preferences[Keys.roundsBeforeLongBreak] ?: 4,
         systemBackGestureEnabled = preferences[Keys.systemBackGesture] ?: true,
         composeSwipeBackEnabled = preferences[Keys.composeSwipeBack] ?: true,
-        notificationStyle = NotificationStyle.entries.firstOrNull { it.name == preferences[Keys.notificationStyle] }
-            ?: NotificationStyle.OngoingActivity,
+        liveUpdateNotificationEnabled = preferences[Keys.liveUpdateNotification] ?: false,
+        ongoingActivityNotificationEnabled = preferences[Keys.ongoingActivityNotification] ?: true,
+        standardNotificationEnabled = preferences[Keys.standardNotification] ?: false,
         screenStyle = ScreenStyle.entries.firstOrNull { it.name == preferences[Keys.screenStyle] }
             ?: ScreenStyle.Round,
     ).sanitized()

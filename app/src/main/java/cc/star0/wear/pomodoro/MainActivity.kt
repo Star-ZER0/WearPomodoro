@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cc.star0.wear.pomodoro.permissions.AppPermissionReport
 import cc.star0.wear.pomodoro.permissions.PermissionAction
 import cc.star0.wear.pomodoro.permissions.readAppPermissions
+import cc.star0.wear.pomodoro.timer.PomodoroService
 import cc.star0.wear.pomodoro.ui.PomodoroApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (permissionChecksStarted) refreshPermissions()
+            PomodoroService.refreshNotifications(this)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +67,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // The timer page does not need a full permission report during cold startup.
         if (permissionChecksStarted) refreshPermissions()
+        PomodoroService.refreshNotifications(this)
     }
 
     override fun onNewIntent(intent: Intent) {
