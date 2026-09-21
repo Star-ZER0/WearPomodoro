@@ -136,7 +136,6 @@ object PomodoroNotifications {
         val timerIntent = contentIntent(context)
         val builder = NotificationCompat.Builder(context, channelId(style))
             .setSmallIcon(R.drawable.ic_notification)
-            .setColor(ContextCompat.getColor(context, R.color.notification_icon))
             .setContentTitle(title)
             .setContentText(
                 if (stopConfirmationPending) context.getString(R.string.notification_stop_confirmation, contentText) else contentText,
@@ -283,7 +282,6 @@ object PomodoroNotifications {
 
         val notification = NotificationCompat.Builder(context, REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setColor(ContextCompat.getColor(context, R.color.notification_icon))
             .setContentTitle(title)
             .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_MAX)
