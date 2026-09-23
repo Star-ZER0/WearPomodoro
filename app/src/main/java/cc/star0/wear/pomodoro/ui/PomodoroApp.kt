@@ -26,6 +26,7 @@ import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.AnimatedPage
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.ColorScheme
+import androidx.wear.compose.material3.HorizontalPageIndicator
 import androidx.wear.compose.material3.HorizontalPagerScaffold
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
@@ -143,7 +144,16 @@ fun PomodoroApp(
                     ),
                     entryProvider = entryProvider {
                         entry<HomeDestination> {
-                            HorizontalPagerScaffold(pagerState = pagerState) {
+                            HorizontalPagerScaffold(
+                                pagerState = pagerState,
+                                pageIndicator = {
+                                    if (settings.screenStyle == ScreenStyle.Round) {
+                                        HorizontalPageIndicator(pagerState)
+                                    } else {
+                                        SquarePageIndicator(pagerState)
+                                    }
+                                },
+                            ) {
                                 HorizontalPager(
                                     state = pagerState,
                                     modifier = Modifier.fillMaxSize(),

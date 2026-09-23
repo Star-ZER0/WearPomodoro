@@ -3,19 +3,23 @@ package cc.star0.wear.pomodoro.ui
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.graphicsLayer
@@ -33,7 +37,9 @@ import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonDefaults
+import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
@@ -43,6 +49,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.lazy.TransformationSpec
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
+import androidx.wear.compose.material3.touchTargetAwareSize
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.ScreenStyle
 
@@ -116,7 +123,14 @@ internal fun SettingsListLayout(
     val focusRequester = remember { FocusRequester() }
     val scrollIndicator: @Composable BoxScope.() -> Unit = {
         if (!LocalScrollCaptureInProgress.current) {
-            if (isRound) ScrollIndicator(roundState) else ScrollIndicator(squareState)
+            if (isRound) {
+                ScrollIndicator(roundState)
+            } else {
+                SquareScrollIndicator(
+                    state = squareState,
+                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
+                )
+            }
         }
     }
     val listItems: SettingsListScope.() -> Unit = {
@@ -163,10 +177,31 @@ internal fun SettingsListLayout(
                 SettingsListScope { key, itemContent ->
                     squareListScope.item(key = key) { SettingsListItemScope().itemContent() }
                 }.listItems()
+                if (onEdgeBack != null) {
+                    // A regular footer keeps the square-screen button circular while scrolling.
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            FilledIconButton(
+                                onClick = onEdgeBack,
+                                modifier = Modifier.touchTargetAwareSize(IconButtonDefaults.SmallButtonSize),
+                                shapes = IconButtonDefaults.shapes(CircleShape),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.action_back_to_general_settings),
+                                    modifier = Modifier.size(IconButtonDefaults.SmallIconSize),
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-    if (onEdgeBack != null) {
+    if (isRound && onEdgeBack != null) {
         ScreenScaffold(
             scrollInfoProvider = scrollInfoProvider,
             scrollIndicator = scrollIndicator,

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -49,6 +50,7 @@ import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
+import cc.star0.wear.pomodoro.model.ScreenStyle
 import cc.star0.wear.pomodoro.text.formatDuration
 import cc.star0.wear.pomodoro.text.formatRoundLabel
 import cc.star0.wear.pomodoro.timer.PomodoroService
@@ -133,88 +135,80 @@ fun TimerContent(
     )
     val rounds = if (ready) settings.focusRoundsBeforeLongBreak else state.effectiveSettings.focusRoundsBeforeLongBreak
     val round = if (ready || state.phase == PomodoroPhase.Focus) state.completedFocusRounds + 1 else state.completedFocusRounds
+    val phaseLabel = if (paused) stringResource(R.string.phase_paused, phase) else phase
+    val timeLabel = formatDuration(resources, display.remainingMillis)
+    val roundLabel = formatRoundLabel(resources, round, rounds)
+    val controls: @Composable (Dp, Modifier) -> Unit = { buttonSize, modifier ->
+        TimerControls(
+            ready = ready,
+            paused = paused,
+            isRunning = state.isRunning,
+            palette = palette,
+            buttonSize = buttonSize,
+            modifier = modifier,
+            onPrimaryAction = when {
+                ready -> onStart
+                paused -> onResume
+                else -> onPause
+            },
+            onStop = { confirmStop = true },
+        )
+    }
 
     ScreenScaffold(contentPadding = PaddingValues(0.dp), timeText = { ScreenTimeText() }) { contentPadding ->
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxSize().padding(contentPadding),
-            contentAlignment = Alignment.Center,
-        ) {
-            val diameter = minOf(maxWidth, maxHeight)
-            val buttonSize = minOf(IconButtonDefaults.DefaultButtonSize, diameter * 0.28f)
-            Box(Modifier.size(diameter), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    progress = { progressState.value },
-                    // A single arc with a 60-degree opening centered at the top for the clock.
-                    startAngle = 300f,
-                    endAngle = 240f,
-                    strokeWidth = 8.dp,
-                    enabled = true,
-                    allowProgressOverflow = false,
-                    modifier = Modifier.fillMaxSize()
-                        .padding(CircularProgressIndicatorDefaults.FullScreenPadding + 4.dp)
-                        .semantics { contentDescription = progressDescription },
-                    colors = ProgressIndicatorDefaults.colors(indicatorColor = palette.accent),
-                )
-                FittedText(
-                    text = if (paused) stringResource(R.string.phase_paused, phase) else phase,
-                    modifier = Modifier.align(Alignment.TopCenter)
-                        .offset(y = diameter * 0.15f).fillMaxWidth(0.68f).height(diameter * 0.11f),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = palette.accent,
-                )
-                FittedText(
-                    text = formatDuration(resources, display.remainingMillis),
-                    modifier = Modifier.align(Alignment.TopCenter)
-                        .offset(y = diameter * 0.28f).fillMaxWidth(0.72f).height(diameter * 0.21f),
-                    style = MaterialTheme.typography.numeralLarge,
-                )
-                Row(
-                    modifier = Modifier.offset(y = diameter * 0.115f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    FilledIconButton(
-                        onClick = when {
-                            ready -> onStart
-                            paused -> onResume
-                            else -> onPause
-                        },
-                        modifier = Modifier.size(buttonSize),
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = palette.accent,
-                            contentColor = palette.onAccent,
-                        ),
-                    ) {
-                        if (state.isRunning) {
-                            Icon(painterResource(R.drawable.ic_pause), stringResource(R.string.timer_pause_description), Modifier.size(28.dp))
-                        } else {
-                            Icon(
-                                Icons.Filled.PlayArrow,
-                                stringResource(if (ready) R.string.timer_start_description else R.string.timer_resume_description),
-                                Modifier.size(30.dp),
-                            )
-                        }
-                    }
-                    if (paused) {
-                        FilledIconButton(
-                            onClick = { confirmStop = true },
-                            modifier = Modifier.size(buttonSize),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer,
-                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                            ),
-                        ) {
-                            Icon(painterResource(R.drawable.ic_stop), stringResource(R.string.timer_stop_description), Modifier.size(28.dp))
-                        }
-                    }
+        if (LocalScreenStyle.current == ScreenStyle.Square) {
+            SquareTimerLayout(
+                phaseLabel = phaseLabel,
+                timeLabel = timeLabel,
+                roundLabel = roundLabel,
+                progress = { progressState.value },
+                accent = palette.accent,
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                controls = { buttonSize -> controls(buttonSize, Modifier) },
+            )
+        } else {
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                val diameter = minOf(maxWidth, maxHeight)
+                val buttonSize = minOf(IconButtonDefaults.DefaultButtonSize, diameter * 0.28f)
+                Box(Modifier.size(diameter), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        progress = { progressState.value },
+                        // A single arc with a 60-degree opening centered at the top for the clock.
+                        startAngle = 300f,
+                        endAngle = 240f,
+                        strokeWidth = 8.dp,
+                        enabled = true,
+                        allowProgressOverflow = false,
+                        modifier = Modifier.fillMaxSize()
+                            .padding(CircularProgressIndicatorDefaults.FullScreenPadding + 4.dp)
+                            .semantics { contentDescription = progressDescription },
+                        colors = ProgressIndicatorDefaults.colors(indicatorColor = palette.accent),
+                    )
+                    FittedText(
+                        text = phaseLabel,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                            .offset(y = diameter * 0.15f).fillMaxWidth(0.68f).height(diameter * 0.11f),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = palette.accent,
+                    )
+                    FittedText(
+                        text = timeLabel,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                            .offset(y = diameter * 0.28f).fillMaxWidth(0.72f).height(diameter * 0.21f),
+                        style = MaterialTheme.typography.numeralLarge,
+                    )
+                    controls(buttonSize, Modifier.offset(y = diameter * 0.115f))
+                    FittedText(
+                        text = roundLabel,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                            .offset(y = diameter * 0.79f).fillMaxWidth(0.58f).height(diameter * 0.09f),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
-                FittedText(
-                    text = formatRoundLabel(resources, round, rounds),
-                    modifier = Modifier.align(Alignment.TopCenter)
-                        .offset(y = diameter * 0.79f).fillMaxWidth(0.58f).height(diameter * 0.09f),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
     }
@@ -226,5 +220,54 @@ fun TimerContent(
                 onStop()
             },
         )
+    }
+}
+
+@Composable
+private fun TimerControls(
+    ready: Boolean,
+    paused: Boolean,
+    isRunning: Boolean,
+    palette: SettingPalette,
+    buttonSize: Dp,
+    modifier: Modifier,
+    onPrimaryAction: () -> Unit,
+    onStop: () -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        FilledIconButton(
+            onClick = onPrimaryAction,
+            modifier = Modifier.size(buttonSize),
+            colors = IconButtonDefaults.filledIconButtonColors(
+                containerColor = palette.accent,
+                contentColor = palette.onAccent,
+            ),
+        ) {
+            if (isRunning) {
+                Icon(painterResource(R.drawable.ic_pause), stringResource(R.string.timer_pause_description), Modifier.size(28.dp))
+            } else {
+                Icon(
+                    Icons.Filled.PlayArrow,
+                    stringResource(if (ready) R.string.timer_start_description else R.string.timer_resume_description),
+                    Modifier.size(30.dp),
+                )
+            }
+        }
+        if (paused) {
+            FilledIconButton(
+                onClick = onStop,
+                modifier = Modifier.size(buttonSize),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                ),
+            ) {
+                Icon(painterResource(R.drawable.ic_stop), stringResource(R.string.timer_stop_description), Modifier.size(28.dp))
+            }
+        }
     }
 }
