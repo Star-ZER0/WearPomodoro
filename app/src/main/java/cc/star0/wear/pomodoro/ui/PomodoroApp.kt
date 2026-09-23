@@ -62,7 +62,7 @@ private object NotificationStyleDestination : NavKey
 private data class SettingEditorDestination(val kind: SettingKind) : NavKey
 
 @Serializable
-enum class SettingKind { Focus, ShortBreak, LongBreak, RoundsBeforeLongBreak }
+enum class SettingKind { Focus, ShortBreak, LongBreak, RoundsBeforeLongBreak, SquareTimerCornerRadius }
 
 /** Top time display: curved [TimeText] on round screens, straight centered label on square. */
 @Composable
@@ -175,6 +175,7 @@ fun PomodoroApp(
                                                 onOpenAppSettings = { onPermissionAction(PermissionAction.AppSettings) },
                                                 onAbout = { backStack.add(AboutDestination) },
                                                 onScreenStyle = { backStack.add(ScreenStyleDestination) },
+                                                onSquareTimerCornerRadius = { backStack.add(SettingEditorDestination(SettingKind.SquareTimerCornerRadius)) },
                                                 onNotificationStyle = { backStack.add(NotificationStyleDestination) },
                                             )
                                         }

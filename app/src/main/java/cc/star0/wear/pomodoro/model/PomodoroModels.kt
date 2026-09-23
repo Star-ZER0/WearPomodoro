@@ -28,6 +28,7 @@ data class PomodoroSettings(
     val systemBackGestureEnabled: Boolean = true,
     val composeSwipeBackEnabled: Boolean = true,
     val screenStyle: ScreenStyle = ScreenStyle.Round,
+    val squareTimerCornerRadiusDp: Int = DEFAULT_SQUARE_TIMER_CORNER_RADIUS_DP,
     val liveUpdateNotificationEnabled: Boolean = false,
     val ongoingActivityNotificationEnabled: Boolean = true,
     val standardNotificationEnabled: Boolean = false,
@@ -45,6 +46,7 @@ data class PomodoroSettings(
     }
 
     fun sanitized(): PomodoroSettings = copy(
+        squareTimerCornerRadiusDp = squareTimerCornerRadiusDp.coerceIn(1, 100),
         focusDurationMillis = focusDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
         shortBreakDurationMillis = shortBreakDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
         longBreakDurationMillis = longBreakDurationMillis.coerceIn(1.minutesInMillis, MAX_DURATION_MINUTES.minutesInMillis),
@@ -56,6 +58,7 @@ data class PomodoroSettings(
     )
 
     companion object {
+        const val DEFAULT_SQUARE_TIMER_CORNER_RADIUS_DP = 24
         const val MILLIS_PER_MINUTE = 60_000L
         const val MAX_DURATION_MINUTES = 23 * 60 + 59
         const val NEVER_LONG_BREAK = 0

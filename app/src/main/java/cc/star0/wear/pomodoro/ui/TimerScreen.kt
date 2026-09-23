@@ -163,6 +163,7 @@ fun TimerContent(
                 roundLabel = roundLabel,
                 progress = { progressState.value },
                 accent = palette.accent,
+                cornerRadius = settings.squareTimerCornerRadiusDp.dp,
                 modifier = Modifier.fillMaxSize().padding(contentPadding),
                 controls = { buttonSize -> controls(buttonSize, Modifier) },
             )

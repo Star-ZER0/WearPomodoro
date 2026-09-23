@@ -82,7 +82,7 @@ private fun SettingEditorLoading(onCancel: () -> Unit) {
     }
 }
 
-/** Compact, cyclic pickers: HH:mm with minutes focused, or one focused rounds column. */
+/** Compact pickers: HH:mm with minutes focused, or one focused numeric column. */
 @Composable
 fun SettingEditorContent(
     kind: SettingKind,
@@ -92,29 +92,38 @@ fun SettingEditorContent(
 ) {
     val initialSettings = remember(kind) { settings }
     val rounds = kind == SettingKind.RoundsBeforeLongBreak
+    val cornerRadius = kind == SettingKind.SquareTimerCornerRadius
+    val singleColumn = rounds || cornerRadius
     val roundOptions = PomodoroSettings.LongBreakRoundOptions
     val initialMinutes = when (kind) {
         SettingKind.Focus -> initialSettings.focusDurationMillis
         SettingKind.ShortBreak -> initialSettings.shortBreakDurationMillis
         SettingKind.LongBreak -> initialSettings.longBreakDurationMillis
-        SettingKind.RoundsBeforeLongBreak -> 0L
+        SettingKind.RoundsBeforeLongBreak, SettingKind.SquareTimerCornerRadius -> 0L
     }.div(PomodoroSettings.MILLIS_PER_MINUTE).toInt().coerceIn(0, PomodoroSettings.MAX_DURATION_MINUTES)
     val firstState = rememberPickerState(
-        initialNumberOfOptions = if (rounds) roundOptions.size else 24,
-        initiallySelectedIndex = if (rounds) {
-            roundOptions.indexOf(initialSettings.sanitized().focusRoundsBeforeLongBreak).coerceAtLeast(0)
-        } else initialMinutes / 60,
-        shouldRepeatOptions = true,
+        initialNumberOfOptions = when {
+            rounds -> roundOptions.size
+            cornerRadius -> 100
+            else -> 24
+        },
+        initiallySelectedIndex = when {
+            rounds -> roundOptions.indexOf(initialSettings.sanitized().focusRoundsBeforeLongBreak).coerceAtLeast(0)
+            cornerRadius -> initialSettings.sanitized().squareTimerCornerRadiusDp - 1
+            else -> initialMinutes / 60
+        },
+        shouldRepeatOptions = !cornerRadius,
     )
     val minuteState = rememberPickerState(60, initialMinutes % 60, shouldRepeatOptions = true)
-    var selectedColumn by rememberSaveable(kind) { mutableIntStateOf(if (rounds) 0 else 1) }
+    var selectedColumn by rememberSaveable(kind) { mutableIntStateOf(if (singleColumn) 0 else 1) }
     val selectedMinutes = firstState.selectedOptionIndex * 60 + minuteState.selectedOptionIndex
-    val canSave = rounds || selectedMinutes > 0
+    val canSave = singleColumn || selectedMinutes > 0
     val palette = settingPalette(kind)
     val title = stringResource(settingTitleRes(kind))
     val unit = stringResource(
         when {
             rounds -> R.string.unit_rounds
+            cornerRadius -> R.string.unit_dp
             selectedColumn == 0 -> R.string.unit_hours
             else -> R.string.unit_minutes
         },
@@ -142,13 +151,21 @@ fun SettingEditorContent(
                         selected = selectedColumn == 0,
                         onSelected = { selectedColumn = 0 },
                         palette = palette,
-                        modifier = Modifier.size(if (rounds) 88.dp else 62.dp, diameter * 0.43f),
-                        valueDescriptionRes = if (rounds) R.plurals.round_count else R.plurals.duration_hours,
-                        numberOffset = if (rounds) 2 else 0,
-                        padNumber = !rounds,
+                        modifier = Modifier.size(if (singleColumn) 88.dp else 62.dp, diameter * 0.43f),
+                        valueDescriptionRes = when {
+                            rounds -> R.plurals.round_count
+                            cornerRadius -> null
+                            else -> R.plurals.duration_hours
+                        },
+                        numberOffset = when {
+                            rounds -> 2
+                            cornerRadius -> 1
+                            else -> 0
+                        },
+                        padNumber = !singleColumn,
                         neverOptionIndex = if (rounds) roundOptions.lastIndex else null,
                     )
-                    if (!rounds) {
+                    if (!singleColumn) {
                         Text(stringResource(R.string.time_separator), style = MaterialTheme.typography.numeralSmall)
                         CompactPickerColumn(
                             state = minuteState,
@@ -180,6 +197,7 @@ fun SettingEditorContent(
                                         SettingKind.ShortBreak -> settings.copy(shortBreakDurationMillis = value)
                                         SettingKind.LongBreak -> settings.copy(longBreakDurationMillis = value)
                                         SettingKind.RoundsBeforeLongBreak -> settings.copy(focusRoundsBeforeLongBreak = roundOptions[firstState.selectedOptionIndex])
+                                        SettingKind.SquareTimerCornerRadius -> settings.copy(squareTimerCornerRadiusDp = firstState.selectedOptionIndex + 1)
                                     },
                                 )
                                 onDone()
@@ -204,7 +222,7 @@ private fun CompactPickerColumn(
     onSelected: () -> Unit,
     palette: SettingPalette,
     modifier: Modifier,
-    @PluralsRes valueDescriptionRes: Int,
+    @PluralsRes valueDescriptionRes: Int?,
     numberOffset: Int,
     padNumber: Boolean,
     neverOptionIndex: Int? = null,
@@ -219,7 +237,11 @@ private fun CompactPickerColumn(
                 resources.getString(R.string.long_break_never_description)
             } else {
                 val number = state.selectedOptionIndex + numberOffset
-                resources.getQuantityString(valueDescriptionRes, number, number)
+                if (valueDescriptionRes == null) {
+                    resources.getString(R.string.corner_radius_description, number)
+                } else {
+                    resources.getQuantityString(valueDescriptionRes, number, number)
+                }
             }
         },
         modifier = modifier

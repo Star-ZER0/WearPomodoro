@@ -37,6 +37,7 @@ internal fun SquareTimerLayout(
     roundLabel: String,
     progress: () -> Float,
     accent: Color,
+    cornerRadius: Dp,
     modifier: Modifier = Modifier,
     controls: @Composable (Dp) -> Unit,
 ) {
@@ -46,6 +47,7 @@ internal fun SquareTimerLayout(
         SquareTimerProgress(
             progress = progress,
             accent = accent,
+            cornerRadius = cornerRadius,
             modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 12.dp),
         )
         Column(
@@ -84,6 +86,7 @@ internal fun SquareTimerLayout(
 private fun SquareTimerProgress(
     progress: () -> Float,
     accent: Color,
+    cornerRadius: Dp,
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(R.string.timer_progress_description)
@@ -99,12 +102,10 @@ private fun SquareTimerProgress(
             val top = inset
             val right = size.width - inset
             val bottom = size.height - inset
-            val radius = minOf(24.dp.toPx(), (right - left) / 4f, (bottom - top) / 4f)
+            val radius = minOf(cornerRadius.toPx(), (right - left) / 2f, (bottom - top) / 2f)
             val centerX = size.width / 2f
-            // The open top leaves room for the same system clock used by the round timer.
-            val halfGap = minOf(36.dp.toPx(), (right - left) / 2f - radius)
-            val track = Path().apply {
-                moveTo(centerX + halfGap, top)
+            val outline = Path().apply {
+                moveTo(centerX, top)
                 lineTo(right - radius, top)
                 arcTo(Rect(right - 2 * radius, top, right, top + 2 * radius), -90f, 90f, false)
                 lineTo(right, bottom - radius)
@@ -113,9 +114,16 @@ private fun SquareTimerProgress(
                 arcTo(Rect(left, bottom - 2 * radius, left + 2 * radius, bottom), 90f, 90f, false)
                 lineTo(left, top + radius)
                 arcTo(Rect(left, top, left + 2 * radius, top + 2 * radius), 180f, 90f, false)
-                lineTo(centerX - halfGap, top)
+                lineTo(centerX, top)
+                close()
             }
-            val measure = PathMeasure().apply { setPath(track, false) }
+            // Trim along the outline so even large corners keep an opening for the clock.
+            val measure = PathMeasure().apply { setPath(outline, true) }
+            val halfGap = minOf(36.dp.toPx(), measure.length / 4f)
+            val track = Path().apply {
+                measure.getSegment(halfGap, measure.length - halfGap, this)
+            }
+            measure.setPath(track, false)
             val indicator = Path()
             onDrawBehind {
                 drawPath(track, trackColor, style = stroke)

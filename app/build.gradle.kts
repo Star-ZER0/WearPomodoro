@@ -68,7 +68,6 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "src/main/keepRules/rules.keep",
             )
         }
     }
@@ -92,6 +91,14 @@ android {
 androidComponents {
     val apkProjectName = rootProject.name
     onVariants(selector().withBuildType("release")) { variant ->
+        // Keep in sync with res/xml/locales_config.xml; default resources remain available.
+        variant.androidResources.localeFilters.addAll("en", "zh")
+        // Prefer a smaller download; Android extracts these libraries when installing.
+        variant.packaging.jniLibs.useLegacyPackaging.set(true)
+        variant.packaging.jniLibs.useLegacyPackagingFromBundle.set(true)
+        // Version markers are tooling metadata; built-ins are only read by kotlin-reflect,
+        // which is not a runtime dependency. Keep service registrations and license notices.
+        variant.packaging.resources.excludes.addAll("META-INF/*.version", "**/*.kotlin_builtins")
         variant.outputs.forEach { output ->
             val abi = output.filters
                 .firstOrNull { it.filterType == FilterConfiguration.FilterType.ABI }

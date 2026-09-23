@@ -32,6 +32,7 @@ internal fun settingTitleRes(kind: SettingKind): Int = when (kind) {
     SettingKind.ShortBreak -> R.string.setting_short_break_duration
     SettingKind.LongBreak -> R.string.setting_long_break_duration
     SettingKind.RoundsBeforeLongBreak -> R.string.setting_long_break_rounds
+    SettingKind.SquareTimerCornerRadius -> R.string.setting_square_timer_corner_radius
 }
 
 internal data class SettingPalette(
@@ -48,7 +49,8 @@ internal fun settingPalette(kind: SettingKind): SettingPalette {
         SettingKind.Focus -> SettingPalette(colors.primaryContainer, colors.onPrimaryContainer, colors.primary, colors.onPrimary)
         SettingKind.ShortBreak -> SettingPalette(colors.tertiaryContainer, colors.onTertiaryContainer, colors.tertiary, colors.onTertiary)
         SettingKind.LongBreak -> SettingPalette(colors.secondaryContainer, colors.onSecondaryContainer, colors.secondary, colors.onSecondary)
-        SettingKind.RoundsBeforeLongBreak -> SettingPalette(colors.surfaceContainerHigh, colors.onSurface, colors.primary, colors.onPrimary)
+        SettingKind.RoundsBeforeLongBreak,
+        SettingKind.SquareTimerCornerRadius -> SettingPalette(colors.surfaceContainerHigh, colors.onSurface, colors.primary, colors.onPrimary)
     }
 }
 
@@ -72,11 +74,14 @@ fun SettingsListContent(
         screenStyle = settings.screenStyle,
     ) {
         for (kind in SettingKind.entries) {
+            // Appearance is edited from General settings, not timer settings.
+            if (kind == SettingKind.SquareTimerCornerRadius) continue
             item(key = kind.name) {
                 val value = when (kind) {
                     SettingKind.Focus -> formatMinutes(resources, settings.focusDurationMillis)
                     SettingKind.ShortBreak -> formatMinutes(resources, settings.shortBreakDurationMillis)
                     SettingKind.LongBreak -> formatMinutes(resources, settings.longBreakDurationMillis)
+                    SettingKind.SquareTimerCornerRadius -> stringResource(R.string.corner_radius_value, settings.squareTimerCornerRadiusDp)
                     SettingKind.RoundsBeforeLongBreak ->
                         if (settings.focusRoundsBeforeLongBreak == PomodoroSettings.NEVER_LONG_BREAK) {
                             stringResource(R.string.long_break_never_summary)

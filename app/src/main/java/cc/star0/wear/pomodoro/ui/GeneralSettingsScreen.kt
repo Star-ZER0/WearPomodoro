@@ -13,6 +13,7 @@ import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroSettings
+import cc.star0.wear.pomodoro.model.ScreenStyle
 import cc.star0.wear.pomodoro.permissions.AppPermissionReport
 
 @Composable
@@ -24,6 +25,7 @@ fun GeneralSettingsScreen(
     onOpenPermissions: () -> Unit,
     onOpenAppSettings: () -> Unit,
     onScreenStyle: () -> Unit,
+    onSquareTimerCornerRadius: () -> Unit,
     onNotificationStyle: () -> Unit,
     onAbout: () -> Unit = {},
     settingsLoaded: Boolean = true,
@@ -50,6 +52,17 @@ fun GeneralSettingsScreen(
                 enabled = settingsLoaded,
                 showNavigateNext = true,
             )
+        }
+        if (settings.screenStyle == ScreenStyle.Square) {
+            item(key = "square_timer_corner_radius") {
+                SettingButton(
+                    label = stringResource(R.string.setting_square_timer_corner_radius),
+                    value = stringResource(R.string.corner_radius_value, settings.squareTimerCornerRadiusDp),
+                    onClick = onSquareTimerCornerRadius,
+                    enabled = settingsLoaded,
+                    showNavigateNext = true,
+                )
+            }
         }
         item {
             SwitchButton(

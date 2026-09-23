@@ -31,6 +31,7 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
         val systemBackGesture = booleanPreferencesKey("system_back_gesture_enabled")
         val composeSwipeBack = booleanPreferencesKey("compose_swipe_back_enabled")
         val screenStyle = stringPreferencesKey("screen_style")
+        val squareTimerCornerRadius = intPreferencesKey("square_timer_corner_radius_dp")
         val liveUpdateNotification = booleanPreferencesKey("live_update_notification_enabled")
         val ongoingActivityNotification = booleanPreferencesKey("ongoing_activity_notification_enabled")
         val standardNotification = booleanPreferencesKey("standard_notification_enabled")
@@ -61,6 +62,7 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
             preferences[Keys.systemBackGesture] = settings.systemBackGestureEnabled
             preferences[Keys.composeSwipeBack] = settings.composeSwipeBackEnabled
             preferences[Keys.screenStyle] = settings.screenStyle.name
+            preferences[Keys.squareTimerCornerRadius] = settings.squareTimerCornerRadiusDp
             preferences[Keys.liveUpdateNotification] = settings.liveUpdateNotificationEnabled
             preferences[Keys.ongoingActivityNotification] = settings.ongoingActivityNotificationEnabled
             preferences[Keys.standardNotification] = settings.standardNotificationEnabled
@@ -138,5 +140,7 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
         standardNotificationEnabled = preferences[Keys.standardNotification] ?: false,
         screenStyle = ScreenStyle.entries.firstOrNull { it.name == preferences[Keys.screenStyle] }
             ?: ScreenStyle.Round,
+        squareTimerCornerRadiusDp = preferences[Keys.squareTimerCornerRadius]
+            ?: PomodoroSettings.DEFAULT_SQUARE_TIMER_CORNER_RADIUS_DP,
     ).sanitized()
 }

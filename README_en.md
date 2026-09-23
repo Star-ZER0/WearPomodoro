@@ -33,6 +33,7 @@ Swipe between the three home pages: **Timer, Timer settings, and General setting
 | Long break duration | 15 minutes | 1 minute to 23 hours 59 minutes |
 | Long break interval | Every 4 focus sessions | 2–12 sessions, or Never |
 | Screen style | Round | Round / Square |
+| Square timer corner radius | 24 dp | 1–100 dp |
 | Notification style | Only Ongoing Activity enabled | Independent switches for Live Updates / Ongoing Activity / Standard notification |
 
 ```mermaid
@@ -50,7 +51,7 @@ flowchart LR
 - When the app receives the boot broadcast after a device restart, it returns to the ready state, preserving settings and resetting timer progress and rounds.
 - The Ongoing Activity appears during focus and break countdowns. Pausing or finishing a break removes the activity entry; resuming restores it, and confirming stop removes it with the persistent notification. Tapping the activity or timer notification opens the timer page; leaving a settings editor does not save an unconfirmed draft.
 
-General settings includes screen style, a permission report, a shortcut to system app settings, back gesture options, and an About page. Choose Round or Square in **General settings → Screen style** to immediately switch the timer page and the lists in Timer settings, General settings, Screen style, Permissions, and About. The choice is saved locally. The Square timer adapts to both square and rectangular screens, with resume and stop controls in the same position when paused. The Round timer and duration / round pickers retain their existing layouts. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
+General settings includes screen style, a permission report, a shortcut to system app settings, back gesture options, and an About page. Choose Round or Square in **General settings → Screen style** to immediately switch the timer page and the lists in Timer settings, General settings, Screen style, Permissions, and About. The choice is saved locally. Square mode also shows **Timer corner radius**, a numeric picker that adjusts all four corners of the home timer frame (1–100 dp, default 24 dp). Saving applies the value immediately; canceling discards the draft. The value is retained when switching screen styles. The rendered radius is limited to half the frame's shorter side, while keeping the opening for the clock. The Square timer adapts to both square and rectangular screens, with resume and stop controls in the same position when paused. The Round timer and duration / round pickers retain their existing layouts. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
 
 ## Device compatibility
 
@@ -138,7 +139,11 @@ macOS / Linux：
 
 Release APKs are written to `app/build/outputs/apk/release/`, named `WearPomodoro-<version>-<ABI>.apk`, where ABI is `armeabi-v7a`, `arm64-v8a`, or `universal`.
 
-Release builds enable code minification and resource shrinking. 
+Release builds enable R8 code optimization, obfuscation, and resource shrinking. The app adds no blanket package keep rule; AGP and dependency consumer rules cover Android entry points and reflection. AGP automatically reads the custom rules in [`app/src/main/keepRules/`](app/src/main/keepRules/rules.keep).
+
+Release packages only the default English resources and Chinese translations, and compresses native libraries to reduce APK size. Android extracts those libraries during installation, so APK size differs from installed size. Dependency version markers and unused Kotlin built-ins metadata are excluded, while license notices, service registrations, and startup profiles are retained. When adding a language, update both `locales_config.xml` and the Release `localeFilters`; if `kotlin-reflect` is introduced, remove the `.kotlin_builtins` exclusion.
+
+Choose the APK matching the device ABI for a smaller download; `universal` contains both ARM architectures. Release APKs built without signing configuration are unsigned and must be signed before installation or distribution.
 
 ### GitHub Release
 

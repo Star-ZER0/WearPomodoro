@@ -48,6 +48,10 @@
     <string name="setting_screen_style">Screen style</string>
     <string name="screen_style_round">Round</string>
     <string name="screen_style_square">Square</string>
+    <string name="setting_square_timer_corner_radius">Timer corner radius</string>
+    <string name="corner_radius_value">%1$d dp</string>
+    <string name="corner_radius_description">Corner radius: %1$d dp</string>
+    <string name="unit_dp">dp</string>
     <string name="setting_focus_duration">Focus duration</string>
     <string name="setting_short_break_duration">Short break duration</string>
     <string name="setting_long_break_duration">Long break duration</string>
