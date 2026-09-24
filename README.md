@@ -8,6 +8,9 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](gradle/libs.versions.toml)
 [![License](https://img.shields.io/badge/License-AGPL--3.0-blue)](LICENSE)
 
+[![Issues](https://img.shields.io/github/issues/Star-ZER0/WearPomodoro?style=flat-square&logo=github&label=feedback)](https://github.com/Star-ZER0/WearPomodoro/issues)
+[![QQ Group](https://img.shields.io/badge/QQ%20Group-1124571903-12B7F5?style=flat\&logo=qq\&logoColor=white)](https://qm.qq.com/q/hfBDpyJkeO)
+
 一款面向 Android 智能手表的独立番茄钟，使用 Kotlin、Jetpack Compose 和 Wear Compose Material 3 构建。通过专注、短休息和长休息安排学习节奏，无需账号或配套手机应用。
 
 ## 功能
