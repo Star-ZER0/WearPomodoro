@@ -206,4 +206,4 @@ WeChat tipping code:
 Created by **星澪 Star_ZER0** · [Personal website](https://star0.cc). This app was developed with AI assistance.
 
 - The main project is licensed under **GNU AGPL v3**; see [LICENSE](LICENSE).
-- Bundled `miwearhaptics` has its own **GNU LGPL v3** license; see [miwearhaptics/LICENSE](miwearhaptics/LICENSE).
+- Bundled `cnwearoverlay` has its own **Apache-2.0 with LLVM Exception** license; see [cnwearoverlay/LICENSE](cnwearoverlay/LICENSE).

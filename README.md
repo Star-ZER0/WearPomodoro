@@ -209,4 +209,4 @@ macOS / Linux 将命令入口换为 `./gradlew`。Robolectric 测试覆盖通知
 作者：**星澪 Star_ZER0** · [个人主页](https://star0.cc)。本应用由 AI 辅助编写。
 
 - 主项目采用 **GNU AGPL v3**，详见 [LICENSE](LICENSE)。
-- 内置 `miwearhaptics` 使用其独立的 **GNU LGPL v3** 许可证，详见 [miwearhaptics/LICENSE](miwearhaptics/LICENSE)。
+- 内置 `cnwearoverlay` 使用其独立的 **Apache-2.0 with LLVM Exception** 许可证，详见 [cnwearoverlay/LICENSE](cnwearoverlay/LICENSE)。

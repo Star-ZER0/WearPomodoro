@@ -2,8 +2,6 @@ package cc.star0.wear.pomodoro
 
 import android.app.Application
 import android.content.res.Configuration
-import cc.star0.wear.lib.miwearhaptics.WearHapticFeedbackConstantsCompat
-import cc.star0.wear.lib.miwearhaptics.WearHapticFeedbackConstantsCompat.Policy
 import cc.star0.wear.pomodoro.notifications.PomodoroNotifications
 import cc.star0.wear.pomodoro.timer.PomodoroController
 import kotlinx.coroutines.CoroutineScope
@@ -19,8 +17,6 @@ class PomodoroApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Choose the SDK policy before Compose caches rotary feedback constants.
-        WearHapticFeedbackConstantsCompat.setPolicy(Policy.GOOGLE_FIRST)
         PomodoroNotifications.createChannels(this)
         pomodoroController
     }
