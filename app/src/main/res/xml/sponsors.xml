@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Maintain the sponsor list here. Add one sponsor per row, in display order.
+     Keep the currency symbol and amount together; escape XML special characters in names. -->
+<sponsors>
+    <sponsor username="Leo Li" amount="¥1.00" />
+</sponsors>

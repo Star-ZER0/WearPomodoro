@@ -43,6 +43,28 @@
 
     <!-- Settings and pickers. -->
     <string name="timer_settings_title">Timer settings</string>
+    <string name="timer_plans_title">Timer plans</string>
+    <string name="timer_plans_subtitle">Choose a plan or save your current settings</string>
+    <string name="timer_plan_default">Classic Pomodoro</string>
+    <string name="timer_plan_number">Plan %1$d</string>
+    <string name="timer_plan_current">Current settings\n%1$s</string>
+    <string name="timer_plan_summary">Focus: %1$s\nShort break: %2$s\nLong break: %3$s\n%4$s</string>
+    <string name="timer_plan_save_current">Save current as a new plan</string>
+    <string name="timer_plan_save_summary">Keep these timer settings for later</string>
+    <string name="timer_plan_pending">Confirm to save “%1$s”</string>
+    <string name="timer_plan_manage">Manage plan</string>
+    <string name="timer_plan_manage_hint">Long press a plan to rename or delete it. Confirm below to save changes.</string>
+    <string name="timer_plan_rename">Rename plan</string>
+    <string name="timer_plan_rename_summary">Choose a name for this timer plan</string>
+    <string name="timer_plan_delete">Delete plan</string>
+    <string name="timer_plan_delete_summary">Remove this plan from the list</string>
+    <string name="timer_plan_delete_title">Delete this plan?</string>
+    <string name="timer_plan_delete_message">Remove “%1$s”? Confirm on the plans page to save this change. The current timer will continue.</string>
+    <string name="timer_plan_name">Plan name</string>
+    <string name="timer_plan_save_name">Confirm plan name</string>
+    <string name="action_back_to_timer_plans">Back to timer plans</string>
+    <string name="timer_plan_apply_hint">Confirm to save and apply. Durations take effect next focus session; the long break interval updates immediately.</string>
+    <string name="action_confirm_timer_plan">Confirm timer plan</string>
     <string name="settings_loading">Loading saved settings…</string>
     <string name="general_settings_title">General settings</string>
     <string name="setting_screen_style">Screen style</string>
@@ -112,7 +134,18 @@
     <string name="about_ai_assistance">This app was developed with AI assistance</string>
     <string name="personal_website_title">Personal website</string>
     <string name="project_website_title">GitHub page</string>
+    <string name="open_source_licenses_title">Open source licenses</string>
+    <string name="open_source_licenses_summary">Licenses for libraries and plugins</string>
+    <string name="project_license_title">Project license</string>
+    <string name="project_license_summary">GNU AGPL v3</string>
+    <string name="action_back_to_licenses">Back to open source licenses</string>
+    <string name="license_loading">Loading license…</string>
+    <string name="license_unavailable">This license is unavailable.</string>
     <string name="donation_title">Tip via WeChat</string>
+    <string name="sponsors_title">Sponsors</string>
+    <string name="sponsors_subtitle">Thank you for supporting development</string>
+    <string name="sponsors_thanks">Thank you to every sponsor!</string>
+    <string name="sponsor_amount">Donated %1$s</string>
     <string name="donation_subtitle">I’m cute, please give me money.</string>
     <string name="donation_qr_description">Author tipping QR code. Tap to return to About.</string>
     <string name="action_back_to_about">Back to About</string>
@@ -136,6 +169,10 @@
     <string name="notification_break_finished">Break finished</string>
     <string name="notification_next_focus">Ready for focus session %1$d</string>
 
+    <plurals name="timer_plan_name_hint">
+        <item quantity="one">Enter a name (maximum %1$d character).</item>
+        <item quantity="other">Enter a name (maximum %1$d characters).</item>
+    </plurals>
     <plurals name="duration_minutes">
         <item quantity="one">%1$d minute</item>
         <item quantity="other">%1$d minutes</item>

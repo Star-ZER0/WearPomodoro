@@ -12,6 +12,7 @@ import cc.star0.wear.pomodoro.model.PomodoroEngine
 import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
+import cc.star0.wear.pomodoro.model.TimerPlan
 import cc.star0.wear.pomodoro.notifications.PomodoroNotifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,16 +38,20 @@ class PomodoroController(
     private val _settings = MutableStateFlow(PomodoroSettings())
     private val _state = MutableStateFlow(PomodoroState.initial())
     private val _isInitialized = MutableStateFlow(false)
+    private val _timerPlans = MutableStateFlow<List<TimerPlan>>(emptyList())
 
     val settings: StateFlow<PomodoroSettings> = _settings.asStateFlow()
     val state: StateFlow<PomodoroState> = _state.asStateFlow()
     val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
+    val timerPlans: StateFlow<List<TimerPlan>> = _timerPlans.asStateFlow()
 
     init {
         externalScope.launch {
             val savedSettings = store.loadSettings()
+            val savedPlans = store.loadTimerPlans()
             val savedState = store.loadState(savedSettings)
             _settings.value = savedSettings
+            _timerPlans.value = savedPlans
             _state.value = normalizeRestoredState(savedState, savedSettings)
             _isInitialized.value = true
 
@@ -95,11 +100,24 @@ class PomodoroController(
     }
 
     fun updateSettings(newSettings: PomodoroSettings) {
+        updateSettingsAndPlans(newSettings)
+    }
+
+    fun confirmTimerPlan(plans: List<TimerPlan>, selectedId: Int?) {
+        if (!_isInitialized.value) return
+        val sanitizedPlans = TimerPlan.sanitizedPlans(plans)
+        val selected = selectedId?.let { id -> sanitizedPlans.firstOrNull { it.id == id } ?: return }
+        _timerPlans.value = sanitizedPlans
+        // Managing or deleting the selected plan can leave no selection. Keep the active settings.
+        updateSettingsAndPlans(selected?.applyTo(_settings.value) ?: _settings.value, sanitizedPlans)
+    }
+
+    private fun updateSettingsAndPlans(newSettings: PomodoroSettings, plans: List<TimerPlan>? = null) {
         if (!_isInitialized.value) return
         val sanitized = newSettings.sanitized()
         _settings.value = sanitized
         externalScope.launch {
-            store.saveSettings(sanitized)
+            store.saveSettings(sanitized, plans)
         }
         val previous = _state.value
         _state.update { current -> PomodoroEngine.applySettings(current, sanitized) }

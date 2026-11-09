@@ -24,7 +24,10 @@ import cc.star0.wear.pomodoro.R
 @Composable
 fun AboutScreen(
     onOpenUrl: (String) -> Unit,
+    onShowOpenSourceLicenses: () -> Unit,
+    onShowProjectLicense: () -> Unit,
     onShowDonationQr: () -> Unit,
+    onShowSponsors: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val appName = stringResource(R.string.app_name)
@@ -64,6 +67,22 @@ fun AboutScreen(
                 label = stringResource(R.string.project_website_title),
                 value = stringResource(R.string.project_website_label),
                 onClick = { onOpenUrl(projectUrl) },
+                showNavigateNext = true,
+            )
+        }
+        item(key = "open_source_licenses") {
+            SettingButton(
+                label = stringResource(R.string.open_source_licenses_title),
+                value = stringResource(R.string.open_source_licenses_summary),
+                onClick = onShowOpenSourceLicenses,
+                showNavigateNext = true,
+            )
+        }
+        item(key = "project_license") {
+            SettingButton(
+                label = stringResource(R.string.project_license_title),
+                value = stringResource(R.string.project_license_summary),
+                onClick = onShowProjectLicense,
                 showNavigateNext = true,
             )
         }
@@ -112,6 +131,14 @@ fun AboutScreen(
                 label = stringResource(R.string.donation_title),
                 value = stringResource(R.string.donation_subtitle),
                 onClick = onShowDonationQr,
+                showNavigateNext = true,
+            )
+        }
+        item(key = "sponsors") {
+            SettingButton(
+                label = stringResource(R.string.sponsors_title),
+                value = stringResource(R.string.sponsors_subtitle),
+                onClick = onShowSponsors,
                 showNavigateNext = true,
             )
         }

@@ -58,21 +58,31 @@ internal fun settingPalette(kind: SettingKind): SettingPalette {
 fun SettingsScreen(
     viewModel: PomodoroViewModel,
     onEditSetting: (SettingKind) -> Unit,
+    onOpenTimerPlans: () -> Unit,
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
-    SettingsListContent(settings, onEditSetting)
+    SettingsListContent(settings, onEditSetting, onOpenTimerPlans)
 }
 
 @Composable
 fun SettingsListContent(
     settings: PomodoroSettings,
     onEditSetting: (SettingKind) -> Unit,
+    onOpenTimerPlans: () -> Unit,
 ) {
     val resources = LocalResources.current
     SettingsListLayout(
         title = stringResource(R.string.timer_settings_title),
         screenStyle = settings.screenStyle,
     ) {
+        item(key = "timer_plans") {
+            SettingButton(
+                label = stringResource(R.string.timer_plans_title),
+                value = stringResource(R.string.timer_plans_subtitle),
+                onClick = onOpenTimerPlans,
+                showNavigateNext = true,
+            )
+        }
         for (kind in SettingKind.entries) {
             // Appearance is edited from General settings, not timer settings.
             if (kind == SettingKind.SquareTimerCornerRadius) continue
@@ -122,7 +132,7 @@ internal fun SettingsListItemScope.SettingButton(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             ) {
-                Text(label)
+                Text(label, modifier = Modifier.weight(1f))
                 if (showNavigateNext) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

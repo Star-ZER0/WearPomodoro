@@ -66,7 +66,7 @@ fun SettingEditorScreen(
 }
 
 @Composable
-private fun SettingEditorLoading(onCancel: () -> Unit) {
+internal fun SettingEditorLoading(onCancel: () -> Unit) {
     ScreenScaffold(contentPadding = PaddingValues(0.dp), timeText = {}) {
         Column(
             modifier = Modifier.fillMaxSize().padding(24.dp),

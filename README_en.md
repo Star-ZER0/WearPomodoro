@@ -14,6 +14,7 @@ A standalone Pomodoro timer for Android watches, built with Kotlin, Jetpack Comp
 
 - **Timer controls**: start, pause, resume, and stop with confirmation; see the remaining time, session progress, and round count.
 - **Adjustable sessions**: customize focus and break durations, choose a long break interval, or disable long breaks.
+- **Timer plans**: choose Classic Pomodoro or a saved plan at the top of Timer settings, or save your current settings as a new plan. Confirm to save and apply.
 - **Background timing and reminders**: a foreground service and system alarms handle phase changes. The ongoing notification offers pause, continue, and stop actions, with notifications and vibration at phase completion.
 - **Ongoing Activity**: supported Wear OS systems show a timer entry on the watch face, with an animated icon in active mode and a static icon in ambient mode. The launcher's Recents section shows the current phase and countdown. Tap to return directly to the timer page.
 - **Live Updates**: requests promoted timer notifications on supported systems, with a system-rendered countdown. Live Updates, Ongoing Activity, and standard notifications each have a separate channel and switch.
@@ -48,10 +49,13 @@ flowchart LR
 - A completed focus session starts a break automatically. After the break, the next focus session waits for you to start it. Short breaks retain the round count; finishing a long break resets it.
 - On the timer page, pause first, then stop and confirm to reset session progress and completed rounds. Stopping from the notification requires a second confirmation tap within 10 seconds.
 - Duration changes apply when you next start a focus session. The current focus session and its break retain the durations saved at its start. Changes to the long break interval immediately affect subsequent break selection.
+- **Timer settings → Timer plans** initially offers Classic Pomodoro (25 / 5 / 15 minutes, a long break every 4 sessions). “Save current as a new plan” stages the three durations and long break interval from when you opened the page, with a numbered name by default. Long press any plan, including Classic Pomodoro, to rename or delete it. Names support Chinese, English, and emoji, up to 40 characters. The keyboard’s Enter / Done action only finishes text input; confirm the name with the editor’s check button. Deletion requires confirmation. The check button at the bottom of the plans page saves additions, renames, and deletions and applies the selected plan; canceling with the cross button or going back discards the changes. After deleting the selected plan, confirming keeps the current timer settings. You can delete all plans and save the current settings again. Renaming or deleting a plan does not reset the current timer, interface preferences, or notification preferences.
 - When the app receives the boot broadcast after a device restart, it returns to the ready state, preserving settings and resetting timer progress and rounds.
 - The Ongoing Activity appears during focus and break countdowns. Pausing or finishing a break removes the activity entry; resuming restores it, and confirming stop removes it with the persistent notification. Tapping the activity or timer notification opens the timer page; leaving a settings editor does not save an unconfirmed draft.
 
 General settings includes screen style, a permission report, a shortcut to system app settings, back gesture options, and an About page. Choose Round or Square in **General settings → Screen style** to immediately switch the timer page and the lists in Timer settings, General settings, Screen style, Permissions, and About. The choice is saved locally. Square mode also shows **Timer corner radius**, a numeric picker that adjusts all four corners of the home timer frame (1–100 dp, default 24 dp). Saving applies the value immediately; canceling discards the draft. The value is retained when switching screen styles. The rendered radius is limited to half the frame's shorter side, while keeping the opening for the clock. The Square timer adapts to both square and rectangular screens, with resume and stop controls in the same position when paused. The Round timer and duration / round pickers retain their existing layouts. On Android 16 / Wear OS 6 (API 36) and later, the system back gesture setting also controls swipe back; earlier versions allow separate settings.
+
+Below **GitHub page**, About offers **Open source licenses**: select a library or plugin to read its bundled license offline. **Project license**, directly below it, opens the full AGPL v3 text. Lists and details support Round / Square layouts, rotary scrolling, and explicit back buttons.
 
 ## Device compatibility
 
@@ -194,6 +198,8 @@ Use `./gradlew` on macOS / Linux. Robolectric tests cover notification switch co
 ## Support the project
 
 If you find this project useful, you can support development via Ko-fi or WeChat.
+
+In the app, **About → Sponsors** appears below “Tip via WeChat” and lists usernames and donation amounts, currently **Leo Li · ¥1.00**. Maintain the list in [`app/src/main/res/xml/sponsors.xml`](app/src/main/res/xml/sponsors.xml): each `<sponsor>` entry has a `username` and an `amount` including its currency symbol. Add, edit, or remove entries and rebuild the app to update the list.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I1J826UQFX)
 

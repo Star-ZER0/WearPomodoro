@@ -1,5 +1,6 @@
 package cc.star0.wear.pomodoro.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -107,8 +108,9 @@ internal class SettingsListItemScope(
 @Composable
 internal fun SettingsListLayout(
     title: String,
-    onEdgeBack: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    onEdgeBack: (() -> Unit)? = null,
+    @StringRes edgeBackDescription: Int = R.string.action_back_to_general_settings,
     screenStyle: ScreenStyle = LocalScreenStyle.current,
     content: SettingsListScope.() -> Unit,
 ) {
@@ -191,7 +193,7 @@ internal fun SettingsListLayout(
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = stringResource(R.string.action_back_to_general_settings),
+                                    contentDescription = stringResource(edgeBackDescription),
                                     modifier = Modifier.size(IconButtonDefaults.SmallIconSize),
                                 )
                             }
@@ -219,7 +221,7 @@ internal fun SettingsListLayout(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.action_back_to_general_settings),
+                        contentDescription = stringResource(edgeBackDescription),
                         modifier = Modifier.size(EdgeButtonDefaults.SmallIconSize),
                     )
                 }

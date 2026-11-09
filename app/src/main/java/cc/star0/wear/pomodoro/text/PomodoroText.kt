@@ -3,6 +3,7 @@ package cc.star0.wear.pomodoro.text
 import android.content.res.Resources
 import cc.star0.wear.pomodoro.R
 import cc.star0.wear.pomodoro.model.PomodoroSettings
+import cc.star0.wear.pomodoro.model.TimerPlan
 import kotlin.math.roundToInt
 
 /** Shared by Compose and notifications; use the context's configured app locale. */
@@ -31,4 +32,21 @@ fun durationInMinutes(millis: Long): Int =
 fun formatMinutes(resources: Resources, millis: Long): String {
     val minutes = durationInMinutes(millis)
     return resources.getQuantityString(R.plurals.duration_minutes, minutes, minutes)
+}
+
+fun formatTimerPlan(resources: Resources, plan: TimerPlan): String {
+    val interval = if (plan.focusRoundsBeforeLongBreak == PomodoroSettings.NEVER_LONG_BREAK) {
+        resources.getString(R.string.long_break_never_summary)
+    } else {
+        resources.getQuantityString(
+            R.plurals.long_break_interval, plan.focusRoundsBeforeLongBreak, plan.focusRoundsBeforeLongBreak,
+        )
+    }
+    return resources.getString(
+        R.string.timer_plan_summary,
+        formatMinutes(resources, plan.focusDurationMillis),
+        formatMinutes(resources, plan.shortBreakDurationMillis),
+        formatMinutes(resources, plan.longBreakDurationMillis),
+        interval,
+    )
 }

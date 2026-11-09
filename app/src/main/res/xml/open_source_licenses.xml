@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App runtime artifacts (including transitive libraries) and APK build plugins.
+     License names come from their Maven POMs; bundled texts are in assets/licenses/.
+     Keep stable IDs and update this list when dependencies change. -->
+<licenses>
+    <component id="wearpomodoro" name="WearPomodoro" license="AGPL-3.0" file="project.txt" category="project" />
+    <component id="cnwearoverlay" name="CN Wear Overlay" license="Apache-2.0 with LLVM Exception" file="apache-2.0-with-llvm-exception.txt" category="library" />
+    <component id="androidx.activity:activity" name="Activity" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.activity:activity-compose" name="Activity Compose" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.activity:activity-ktx" name="Activity Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.annotation:annotation-experimental" name="Experimental annotation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.annotation:annotation-jvm" name="Annotation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.arch.core:core-common" name="Android Arch-Common" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.arch.core:core-runtime" name="Android Arch-Runtime" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.autofill:autofill" name="AndroidX Autofill" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.collection:collection-jvm" name="collections" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.collection:collection-ktx" name="Collections Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.animation:animation-android" name="Compose Animation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.animation:animation-core-android" name="Compose Animation Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.animation:animation-graphics-android" name="Compose Animation Graphics" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.foundation:foundation-android" name="Compose Foundation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.foundation:foundation-layout-android" name="Compose Layouts" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.material:material-icons-core-android" name="Compose Material Icons Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.material:material-ripple-android" name="Compose Material Ripple" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.runtime:runtime-android" name="Compose Runtime" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.runtime:runtime-annotation-android" name="Compose Runtime Annotation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.runtime:runtime-retain-android" name="Compose Runtime Retain" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.runtime:runtime-saveable-android" name="Compose Saveable" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-android" name="Compose UI" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-geometry-android" name="Compose Geometry" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-graphics-android" name="Compose Graphics" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-text-android" name="Compose UI Text" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-unit-android" name="Compose Unit" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.compose.ui:ui-util-android" name="Compose Util" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.concurrent:concurrent-futures" name="AndroidX Futures" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.core:core" name="Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.core:core-ktx" name="Core Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.core:core-viewtree" name="Core Viewtree" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.customview:customview-poolingcontainer" name="Customview Poolingcontainer" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-android" name="DataStore" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-core-android" name="DataStore Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-core-okio-jvm" name="DataStore Core Okio" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-preferences-android" name="Preferences DataStore" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-preferences-core-android" name="Preferences DataStore Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.datastore:datastore-preferences-external-protobuf" name="DataStore Protobuf" license="BSD-3-Clause" file="protobuf-bsd-3-clause.txt" category="library" />
+    <component id="androidx.datastore:datastore-preferences-proto" name="Preferences DataStore Proto" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.documentfile:documentfile" name="Android Support Library Document File" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.dynamicanimation:dynamicanimation" name="Android Support DynamicAnimation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.emoji2:emoji2" name="Emoji2" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.graphics:graphics-path" name="Android Graphics Path" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.graphics:graphics-shapes-android" name="Graphics Shapes" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.interpolator:interpolator" name="Android Support Library Interpolators" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.legacy:legacy-support-core-utils" name="Android Support Library core utils" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-common-jvm" name="Lifecycle-Common" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-livedata" name="Lifecycle LiveData" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-livedata-core" name="Lifecycle LiveData Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-livedata-core-ktx" name="LiveData Core Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-process" name="Lifecycle Process" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-runtime-android" name="Lifecycle Runtime" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-runtime-compose-android" name="Lifecycle Runtime Compose" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-runtime-ktx-android" name="Lifecycle Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-viewmodel" name="Lifecycle ViewModel" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-viewmodel-android" name="Lifecycle ViewModel" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-viewmodel-compose-android" name="Lifecycle ViewModel Compose" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-viewmodel-ktx" name="Lifecycle ViewModel Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.lifecycle:lifecycle-viewmodel-savedstate-android" name="Lifecycle ViewModel with SavedState" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.loader:loader" name="Android Support Library loader" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.localbroadcastmanager:localbroadcastmanager" name="Android Support Library Local Broadcast Manager" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.navigation3:navigation3-runtime-android" name="Androidx Navigation 3 Runtime" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.navigation3:navigation3-ui-android" name="Androidx Navigation 3 UI" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.navigationevent:navigationevent-android" name="Navigation Event" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.navigationevent:navigationevent-compose-android" name="NavigationEvent Compose" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.print:print" name="Android Support Library Print" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.profileinstaller:profileinstaller" name="Profile Installer" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.savedstate:savedstate-android" name="Saved State" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.savedstate:savedstate-compose-android" name="Saved State Compose" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.savedstate:savedstate-ktx" name="SavedState Kotlin Extensions" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.startup:startup-runtime" name="Android App Startup Runtime" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.tracing:tracing" name="Android Tracing" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.transition:transition" name="Transition" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.versionedparcelable:versionedparcelable" name="VersionedParcelable" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.wear.compose:compose-foundation" name="Android Wear Compose Foundation" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.wear.compose:compose-material-core" name="Android Wear Compose Material Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.wear.compose:compose-material3" name="Android Wear Compose Material 3" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.wear.compose:compose-navigation3" name="Android Wear Compose Navigation 3" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.wear:wear-ongoing" name="Android Wear Ongoing" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.window:window" name="WindowManager" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="androidx.window:window-core-android" name="WindowManager Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="com.google.guava:listenablefuture" name="Guava ListenableFuture only" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="com.squareup.okio:okio-jvm" name="okio" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains.kotlin:kotlin-stdlib" name="Kotlin Stdlib" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains.kotlinx:kotlinx-coroutines-android" name="kotlinx-coroutines-android" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm" name="kotlinx-coroutines-core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains.kotlinx:kotlinx-serialization-core-jvm" name="kotlinx-serialization-core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains.kotlinx:kotlinx-serialization-json-jvm" name="kotlinx-serialization-json" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jetbrains:annotations" name="JetBrains Java Annotations" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="org.jspecify:jspecify" name="JSpecify annotations" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="com.android.application" name="Android Gradle Plugin" license="Apache-2.0" file="apache-2.0.txt" category="plugin" />
+    <component id="org.jetbrains.kotlin.plugin.compose" name="Kotlin Compose Compiler Plugin" license="Apache-2.0" file="apache-2.0.txt" category="plugin" />
+    <component id="org.jetbrains.kotlin.plugin.serialization" name="Kotlin Serialization Plugin" license="Apache-2.0" file="apache-2.0.txt" category="plugin" />
+</licenses>

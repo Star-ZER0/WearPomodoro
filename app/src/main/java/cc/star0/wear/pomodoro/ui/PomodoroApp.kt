@@ -34,6 +34,7 @@ import androidx.wear.compose.material3.TimeText
 import androidx.wear.compose.material3.TimeTextDefaults
 import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
 import cc.star0.wear.pomodoro.PomodoroViewModel
+import cc.star0.wear.pomodoro.data.PROJECT_LICENSE_ID
 import cc.star0.wear.pomodoro.model.ScreenStyle
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.permissions.AppPermissionReport
@@ -50,7 +51,19 @@ private object PermissionsDestination : NavKey
 private object AboutDestination : NavKey
 
 @Serializable
+private object OpenSourceLicensesDestination : NavKey
+
+@Serializable
+private data class LicenseDetailDestination(val componentId: String) : NavKey
+
+@Serializable
 private object DonationQrDestination : NavKey
+
+@Serializable
+private object SponsorsDestination : NavKey
+
+@Serializable
+private object TimerPlansDestination : NavKey
 
 @Serializable
 private object ScreenStyleDestination : NavKey
@@ -164,6 +177,7 @@ fun PomodoroApp(
                                             1 -> SettingsScreen(
                                                 viewModel = viewModel,
                                                 onEditSetting = { kind -> backStack.add(SettingEditorDestination(kind)) },
+                                                onOpenTimerPlans = { backStack.add(TimerPlansDestination) },
                                             )
                                             2 -> GeneralSettingsScreen(
                                                 settings = settings,
@@ -222,12 +236,30 @@ fun PomodoroApp(
                         entry<AboutDestination> {
                             AboutScreen(
                                 onOpenUrl = onOpenUrl,
+                                onShowOpenSourceLicenses = { backStack.add(OpenSourceLicensesDestination) },
+                                onShowProjectLicense = { backStack.add(LicenseDetailDestination(PROJECT_LICENSE_ID)) },
                                 onShowDonationQr = { backStack.add(DonationQrDestination) },
+                                onShowSponsors = { backStack.add(SponsorsDestination) },
                                 onNavigateBack = navigateBack,
                             )
                         }
                         entry<DonationQrDestination> {
                             TipCodeScreen(onNavigateBack = navigateBack)
+                        }
+                        entry<OpenSourceLicensesDestination> {
+                            OpenSourceLicensesScreen(
+                                onOpenLicense = { backStack.add(LicenseDetailDestination(it)) },
+                                onNavigateBack = navigateBack,
+                            )
+                        }
+                        entry<LicenseDetailDestination> { destination ->
+                            LicenseDetailScreen(destination.componentId, onNavigateBack = navigateBack)
+                        }
+                        entry<SponsorsDestination> {
+                            SponsorsScreen(onNavigateBack = navigateBack)
+                        }
+                        entry<TimerPlansDestination> {
+                            TimerPlansScreen(viewModel = viewModel, onDone = navigateBack)
                         }
                     },
                 )

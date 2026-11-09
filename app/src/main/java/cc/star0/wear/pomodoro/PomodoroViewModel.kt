@@ -3,6 +3,7 @@ package cc.star0.wear.pomodoro
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import cc.star0.wear.pomodoro.model.PomodoroSettings
+import cc.star0.wear.pomodoro.model.TimerPlan
 import cc.star0.wear.pomodoro.timer.PomodoroService
 
 class PomodoroViewModel(application: Application) : AndroidViewModel(application) {
@@ -11,6 +12,7 @@ class PomodoroViewModel(application: Application) : AndroidViewModel(application
     val settings = controller.settings
     val state = controller.state
     val isInitialized = controller.isInitialized
+    val timerPlans = controller.timerPlans
 
     fun startFocus() {
         PomodoroService.start(getApplication())
@@ -30,5 +32,9 @@ class PomodoroViewModel(application: Application) : AndroidViewModel(application
 
     fun updateSettings(settings: PomodoroSettings) {
         controller.updateSettings(settings)
+    }
+
+    fun confirmTimerPlan(plans: List<TimerPlan>, selectedId: Int?) {
+        controller.confirmTimerPlan(plans, selectedId)
     }
 }

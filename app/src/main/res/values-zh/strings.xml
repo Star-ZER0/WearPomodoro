@@ -40,6 +40,28 @@
     <string name="action_back_to_general_settings">返回通用设置</string>
 
     <string name="timer_settings_title">计时设置</string>
+    <string name="timer_plans_title">计时方案</string>
+    <string name="timer_plans_subtitle">选择方案或保存当前设置</string>
+    <string name="timer_plan_default">经典番茄钟</string>
+    <string name="timer_plan_number">方案 %1$d</string>
+    <string name="timer_plan_current">当前设置\n%1$s</string>
+    <string name="timer_plan_summary">学习：%1$s\n短休息：%2$s\n长休息：%3$s\n%4$s</string>
+    <string name="timer_plan_save_current">将当前保存为新方案</string>
+    <string name="timer_plan_save_summary">保留这组计时设置，方便以后使用</string>
+    <string name="timer_plan_pending">点击确认后保存“%1$s”</string>
+    <string name="timer_plan_manage">管理方案</string>
+    <string name="timer_plan_manage_hint">长按方案可修改名称或删除，点击下方确认后保存更改。</string>
+    <string name="timer_plan_rename">修改方案名称</string>
+    <string name="timer_plan_rename_summary">为这组计时设置取个名字</string>
+    <string name="timer_plan_delete">删除方案</string>
+    <string name="timer_plan_delete_summary">从方案列表中移除此方案</string>
+    <string name="timer_plan_delete_title">删除此方案？</string>
+    <string name="timer_plan_delete_message">移除“%1$s”？回到方案页点击确认后保存此更改，当前计时会继续。</string>
+    <string name="timer_plan_name">方案名称</string>
+    <string name="timer_plan_save_name">确认方案名称</string>
+    <string name="action_back_to_timer_plans">返回计时方案</string>
+    <string name="timer_plan_apply_hint">确认后保存并应用。时长在下次开始学习时生效，长休息轮数立即更新。</string>
+    <string name="action_confirm_timer_plan">确认计时方案</string>
     <string name="settings_loading">正在读取已保存的设置…</string>
     <string name="general_settings_title">通用设置</string>
     <string name="setting_screen_style">屏幕样式</string>
@@ -107,7 +129,18 @@
     <string name="about_ai_assistance">此应用由AI辅助编写</string>
     <string name="personal_website_title">个人主页</string>
     <string name="project_website_title">GitHub 主页</string>
+    <string name="open_source_licenses_title">开放源代码许可</string>
+    <string name="open_source_licenses_summary">查看所用库与插件的许可协议</string>
+    <string name="project_license_title">本项目许可</string>
+    <string name="project_license_summary">GNU AGPL v3</string>
+    <string name="action_back_to_licenses">返回开放源代码许可</string>
+    <string name="license_loading">正在读取许可协议…</string>
+    <string name="license_unavailable">暂时无法读取此许可协议。</string>
     <string name="donation_title">通过微信赞赏</string>
+    <string name="sponsors_title">赞助者</string>
+    <string name="sponsors_subtitle">感谢支持开发的每一位朋友</string>
+    <string name="sponsors_thanks">感谢每一位赞助者的支持！</string>
+    <string name="sponsor_amount">赞赏 %1$s</string>
     <string name="donation_subtitle">我很可爱，请给我钱</string>
     <string name="donation_qr_description">作者打赏二维码，点按返回关于页面</string>
     <string name="action_back_to_about">返回关于页面</string>
@@ -130,6 +163,9 @@
     <string name="notification_break_finished">休息结束</string>
     <string name="notification_next_focus">准备开始第 %1$d 轮学习</string>
 
+    <plurals name="timer_plan_name_hint">
+        <item quantity="other">请输入名称，最多 %1$d 个字符。</item>
+    </plurals>
     <plurals name="duration_minutes">
         <item quantity="other">%1$d 分钟</item>
     </plurals>

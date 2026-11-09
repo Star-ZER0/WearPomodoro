@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -13,6 +14,7 @@ import cc.star0.wear.pomodoro.model.PomodoroPhase
 import cc.star0.wear.pomodoro.model.PomodoroSettings
 import cc.star0.wear.pomodoro.model.PomodoroState
 import cc.star0.wear.pomodoro.model.ScreenStyle
+import cc.star0.wear.pomodoro.model.TimerPlan
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -35,6 +37,8 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
         val liveUpdateNotification = booleanPreferencesKey("live_update_notification_enabled")
         val ongoingActivityNotification = booleanPreferencesKey("ongoing_activity_notification_enabled")
         val standardNotification = booleanPreferencesKey("standard_notification_enabled")
+        val legacyTimerPlans = stringSetPreferencesKey("timer_plans_v1")
+        val timerPlans = stringSetPreferencesKey("timer_plans_v2")
 
         val phase = stringPreferencesKey("timer_phase")
         val isRunning = booleanPreferencesKey("timer_is_running")
@@ -53,7 +57,19 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
 
     suspend fun loadSettings(): PomodoroSettings = readSettingsFrom(dataStore.data.first())
 
-    suspend fun saveSettings(settings: PomodoroSettings) {
+    suspend fun loadTimerPlans(): List<TimerPlan> {
+        val preferences = dataStore.data.first()
+        if (preferences.contains(Keys.timerPlans)) {
+            // An explicitly empty list means the user deleted all plans, including the classic one.
+            return TimerPlan.sanitizedPlans(preferences[Keys.timerPlans].orEmpty().sorted().mapNotNull(TimerPlan::decode))
+        }
+        return TimerPlan.sanitizedPlans(
+            listOf(TimerPlan.Default) + preferences[Keys.legacyTimerPlans].orEmpty().sorted()
+                .mapNotNull(TimerPlan::decode).filter { it.id > 0 },
+        )
+    }
+
+    suspend fun saveSettings(settings: PomodoroSettings, timerPlans: List<TimerPlan>? = null) {
         dataStore.edit { preferences ->
             preferences[Keys.focusDuration] = settings.focusDurationMillis
             preferences[Keys.shortBreakDuration] = settings.shortBreakDurationMillis
@@ -66,6 +82,11 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
             preferences[Keys.liveUpdateNotification] = settings.liveUpdateNotificationEnabled
             preferences[Keys.ongoingActivityNotification] = settings.ongoingActivityNotificationEnabled
             preferences[Keys.standardNotification] = settings.standardNotificationEnabled
+            if (timerPlans != null) {
+                preferences[Keys.timerPlans] = TimerPlan.sanitizedPlans(timerPlans)
+                    .map(TimerPlan::encode).toSet()
+                preferences.remove(Keys.legacyTimerPlans)
+            }
         }
     }
 
