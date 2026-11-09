@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalScrollCaptureInProgress
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -117,7 +118,7 @@ internal fun SettingsListLayout(
     // Keep both saveable states so toggling styles does not discard either list's position.
     val roundState = rememberTransformingLazyColumnState()
     val squareState = rememberLazyListState()
-    val isRound = screenStyle == ScreenStyle.Round
+    val isRound = screenStyle.resolve(LocalConfiguration.current.isScreenRound) == ScreenStyle.Round
     val scrollState = if (isRound) roundState else squareState
     val scrollInfoProvider = if (isRound) ScrollInfoProvider(roundState) else ScrollInfoProvider(squareState)
     val transformationSpec = rememberTransformationSpec()

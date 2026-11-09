@@ -24,6 +24,7 @@ import cc.star0.wear.pomodoro.R
 @Composable
 fun AboutScreen(
     onOpenUrl: (String) -> Unit,
+    onShowLinkQr: (String) -> Unit,
     onShowOpenSourceLicenses: () -> Unit,
     onShowProjectLicense: () -> Unit,
     onShowDonationQr: () -> Unit,
@@ -34,6 +35,8 @@ fun AboutScreen(
     val authorName = stringResource(R.string.author_name)
     val personalUrl = stringResource(R.string.personal_website_url)
     val projectUrl = stringResource(R.string.project_website_url)
+    val qqGroupUrl = stringResource(R.string.qq_group_url)
+    val openLinkLabel = stringResource(R.string.action_open_link)
     SettingsListLayout(title = stringResource(R.string.about_title), onEdgeBack = onNavigateBack) {
         item(key = "app") {
             Column(
@@ -66,7 +69,9 @@ fun AboutScreen(
             SettingButton(
                 label = stringResource(R.string.project_website_title),
                 value = stringResource(R.string.project_website_label),
-                onClick = { onOpenUrl(projectUrl) },
+                onClick = { onShowLinkQr(projectUrl) },
+                onLongClick = { onOpenUrl(projectUrl) },
+                onLongClickLabel = openLinkLabel,
                 showNavigateNext = true,
             )
         }
@@ -122,8 +127,29 @@ fun AboutScreen(
             SettingButton(
                 label = stringResource(R.string.personal_website_title),
                 value = stringResource(R.string.personal_website_label),
-                onClick = { onOpenUrl(personalUrl) },
+                onClick = { onShowLinkQr(personalUrl) },
+                onLongClick = { onOpenUrl(personalUrl) },
+                onLongClickLabel = openLinkLabel,
                 showNavigateNext = true,
+            )
+        }
+        item(key = "qq_group") {
+            SettingButton(
+                label = stringResource(R.string.qq_group_title),
+                value = stringResource(R.string.qq_group_number),
+                onClick = { onShowLinkQr(qqGroupUrl) },
+                onLongClick = { onOpenUrl(qqGroupUrl) },
+                onLongClickLabel = openLinkLabel,
+                showNavigateNext = true,
+            )
+        }
+        item(key = "link_qr_hint") {
+            Text(
+                text = stringResource(R.string.link_qr_hint),
+                modifier = Modifier.fillMaxWidth().transformedContent(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
             )
         }
         item(key = "donation") {

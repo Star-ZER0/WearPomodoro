@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.RadioButton
@@ -15,6 +16,7 @@ import cc.star0.wear.pomodoro.model.ScreenStyle
 
 @StringRes
 internal fun screenStyleTitleRes(style: ScreenStyle): Int = when (style) {
+    ScreenStyle.Auto -> R.string.screen_style_auto
     ScreenStyle.Round -> R.string.screen_style_round
     ScreenStyle.Square -> R.string.screen_style_square
 }
@@ -26,6 +28,7 @@ fun ScreenStyleScreen(
     onSettingsChange: (PomodoroSettings) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
+    val detectedStyle = ScreenStyle.Auto.resolve(LocalConfiguration.current.isScreenRound)
     SettingsListLayout(
         title = stringResource(R.string.setting_screen_style),
         onEdgeBack = onNavigateBack,
@@ -39,6 +42,11 @@ fun ScreenStyleScreen(
                     onSelect = { onSettingsChange(settings.copy(screenStyle = style)) },
                     enabled = settingsLoaded,
                     label = { Text(stringResource(screenStyleTitleRes(style))) },
+                    secondaryLabel = if (style == ScreenStyle.Auto) {
+                        { Text(stringResource(R.string.screen_style_auto_summary, stringResource(screenStyleTitleRes(detectedStyle)))) }
+                    } else {
+                        null
+                    },
                     modifier = Modifier.fillMaxWidth().transformedHeight()
                         .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                     transformation = transformation,

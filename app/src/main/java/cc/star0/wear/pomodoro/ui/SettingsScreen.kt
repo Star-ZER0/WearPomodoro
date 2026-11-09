@@ -123,9 +123,13 @@ internal fun SettingsListItemScope.SettingButton(
     colors: ButtonColors = ButtonDefaults.filledTonalButtonColors(),
     enabled: Boolean = true,
     showNavigateNext: Boolean = false,
+    onLongClick: (() -> Unit)? = null,
+    onLongClickLabel: String? = null,
 ) {
     Button(
         onClick = onClick,
+        onLongClick = onLongClick,
+        onLongClickLabel = onLongClickLabel,
         label = {
             Row(
                 modifier = Modifier.fillMaxWidth(),

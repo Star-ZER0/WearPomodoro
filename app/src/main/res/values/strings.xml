@@ -68,6 +68,8 @@
     <string name="settings_loading">Loading saved settings…</string>
     <string name="general_settings_title">General settings</string>
     <string name="setting_screen_style">Screen style</string>
+    <string name="screen_style_auto">Automatic</string>
+    <string name="screen_style_auto_summary">Detected screen: %1$s</string>
     <string name="screen_style_round">Round</string>
     <string name="screen_style_square">Square</string>
     <string name="setting_square_timer_corner_radius">Timer corner radius</string>
@@ -133,6 +135,10 @@
     <string name="author_tagline">Just a shy INTP OwQ</string>
     <string name="about_ai_assistance">This app was developed with AI assistance</string>
     <string name="personal_website_title">Personal website</string>
+    <string name="qq_group_title">QQ group</string>
+    <string name="action_open_link">Open link</string>
+    <string name="link_qr_hint">Tap for a QR code; long press to open the link.</string>
+    <string name="link_qr_description">QR code for %1$s. Tap to return to About.</string>
     <string name="project_website_title">GitHub page</string>
     <string name="open_source_licenses_title">Open source licenses</string>
     <string name="open_source_licenses_summary">Licenses for libraries and plugins</string>
@@ -211,8 +217,10 @@
     <string name="author_credit" translatable="false">Made by Star_ZER0 with 🤎</string>
     <string name="personal_website_url" translatable="false">https://star0.cc</string>
     <string name="personal_website_label" translatable="false">star0.cc</string>
-    <string name="project_website_url" translatable="false">https://github.com/Star-ZER0/WearPromodoro</string>
+    <string name="project_website_url" translatable="false">https://github.com/Star-ZER0/WearPomodoro</string>
     <string name="project_website_label" translatable="false">Star-ZER0/WearPomodoro</string>
+    <string name="qq_group_url" translatable="false">https://qm.qq.com/q/hfBDpyJkeO</string>
+    <string name="qq_group_number" translatable="false">1124571903</string>
     <string name="foreground_service_subtype" translatable="false">Pomodoro timing and reminders</string>
     <string name="duration_hms" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="duration_ms" translatable="false">%1$02d:%2$02d</string>

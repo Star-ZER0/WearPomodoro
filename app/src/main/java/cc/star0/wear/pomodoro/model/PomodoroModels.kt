@@ -9,8 +9,15 @@ enum class PomodoroPhase {
 }
 
 enum class ScreenStyle {
+    Auto,
     Round,
-    Square,
+    Square;
+
+    /** Resolve the stored preference for display without replacing the user's saved choice. */
+    fun resolve(isScreenRound: Boolean): ScreenStyle = when (this) {
+        Auto -> if (isScreenRound) Round else Square
+        Round, Square -> this
+    }
 }
 
 enum class NotificationStyle {
@@ -27,7 +34,7 @@ data class PomodoroSettings(
     val focusRoundsBeforeLongBreak: Int = 4,
     val systemBackGestureEnabled: Boolean = true,
     val composeSwipeBackEnabled: Boolean = true,
-    val screenStyle: ScreenStyle = ScreenStyle.Round,
+    val screenStyle: ScreenStyle = ScreenStyle.Auto,
     val squareTimerCornerRadiusDp: Int = DEFAULT_SQUARE_TIMER_CORNER_RADIUS_DP,
     val liveUpdateNotificationEnabled: Boolean = false,
     val ongoingActivityNotificationEnabled: Boolean = true,

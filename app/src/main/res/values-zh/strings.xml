@@ -65,6 +65,8 @@
     <string name="settings_loading">正在读取已保存的设置…</string>
     <string name="general_settings_title">通用设置</string>
     <string name="setting_screen_style">屏幕样式</string>
+    <string name="screen_style_auto">自动适配</string>
+    <string name="screen_style_auto_summary">当前检测为%1$s</string>
     <string name="screen_style_round">圆屏</string>
     <string name="screen_style_square">方屏</string>
     <string name="setting_square_timer_corner_radius">计时进度条圆角</string>
@@ -128,6 +130,10 @@
     <string name="author_tagline">INTP社恐一枚OwQ</string>
     <string name="about_ai_assistance">此应用由AI辅助编写</string>
     <string name="personal_website_title">个人主页</string>
+    <string name="qq_group_title">QQ 群</string>
+    <string name="action_open_link">打开链接</string>
+    <string name="link_qr_hint">单击查看二维码，长按打开链接</string>
+    <string name="link_qr_description">%1$s 的二维码，点按返回关于页面</string>
     <string name="project_website_title">GitHub 主页</string>
     <string name="open_source_licenses_title">开放源代码许可</string>
     <string name="open_source_licenses_summary">查看所用库与插件的许可协议</string>

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +31,7 @@ fun GeneralSettingsScreen(
     onAbout: () -> Unit = {},
     settingsLoaded: Boolean = true,
 ) {
+    val effectiveScreenStyle = settings.screenStyle.resolve(LocalConfiguration.current.isScreenRound)
     LaunchedEffect(Unit) { onRefreshPermissions() }
     SettingsListLayout(
         title = stringResource(R.string.general_settings_title),
@@ -53,7 +55,7 @@ fun GeneralSettingsScreen(
                 showNavigateNext = true,
             )
         }
-        if (settings.screenStyle == ScreenStyle.Square) {
+        if (effectiveScreenStyle == ScreenStyle.Square) {
             item(key = "square_timer_corner_radius") {
                 SettingButton(
                     label = stringResource(R.string.setting_square_timer_corner_radius),

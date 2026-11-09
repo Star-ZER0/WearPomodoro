@@ -87,6 +87,7 @@
     <component id="androidx.window:window" name="WindowManager" license="Apache-2.0" file="apache-2.0.txt" category="library" />
     <component id="androidx.window:window-core-android" name="WindowManager Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
     <component id="com.google.guava:listenablefuture" name="Guava ListenableFuture only" license="Apache-2.0" file="apache-2.0.txt" category="library" />
+    <component id="com.google.zxing:core" name="ZXing Core" license="Apache-2.0" file="apache-2.0.txt" category="library" />
     <component id="com.squareup.okio:okio-jvm" name="okio" license="Apache-2.0" file="apache-2.0.txt" category="library" />
     <component id="org.jetbrains.kotlin:kotlin-stdlib" name="Kotlin Stdlib" license="Apache-2.0" file="apache-2.0.txt" category="library" />
     <component id="org.jetbrains.kotlinx:kotlinx-coroutines-android" name="kotlinx-coroutines-android" license="Apache-2.0" file="apache-2.0.txt" category="library" />

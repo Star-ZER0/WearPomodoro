@@ -160,7 +160,7 @@ class PomodoroStore internal constructor(private val dataStore: DataStore<Prefer
         ongoingActivityNotificationEnabled = preferences[Keys.ongoingActivityNotification] ?: true,
         standardNotificationEnabled = preferences[Keys.standardNotification] ?: false,
         screenStyle = ScreenStyle.entries.firstOrNull { it.name == preferences[Keys.screenStyle] }
-            ?: ScreenStyle.Round,
+            ?: ScreenStyle.Auto,
         squareTimerCornerRadiusDp = preferences[Keys.squareTimerCornerRadius]
             ?: PomodoroSettings.DEFAULT_SQUARE_TIMER_CORNER_RADIUS_DP,
     ).sanitized()

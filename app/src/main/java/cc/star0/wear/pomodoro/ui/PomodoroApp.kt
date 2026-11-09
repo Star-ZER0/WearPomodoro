@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
@@ -58,6 +59,9 @@ private data class LicenseDetailDestination(val componentId: String) : NavKey
 
 @Serializable
 private object DonationQrDestination : NavKey
+
+@Serializable
+private data class LinkQrDestination(val url: String) : NavKey
 
 @Serializable
 private object SponsorsDestination : NavKey
@@ -124,9 +128,10 @@ fun PomodoroApp(
     } else {
         PomodoroSettings()
     }
+    val effectiveScreenStyle = settings.screenStyle.resolve(LocalConfiguration.current.isScreenRound)
     CompositionLocalProvider(
         LocalInteractionSettings provides settings,
-        LocalScreenStyle provides settings.screenStyle,
+        LocalScreenStyle provides effectiveScreenStyle,
     ) {
         MaterialTheme(colorScheme = ColorScheme()) {
             AppScaffold(timeText = { ScreenTimeText() }) {
@@ -160,7 +165,7 @@ fun PomodoroApp(
                             HorizontalPagerScaffold(
                                 pagerState = pagerState,
                                 pageIndicator = {
-                                    if (settings.screenStyle == ScreenStyle.Round) {
+                                    if (effectiveScreenStyle == ScreenStyle.Round) {
                                         HorizontalPageIndicator(pagerState)
                                     } else {
                                         SquarePageIndicator(pagerState)
@@ -194,7 +199,7 @@ fun PomodoroApp(
                                             )
                                         }
                                     }
-                                    if (settings.screenStyle == ScreenStyle.Round) {
+                                    if (effectiveScreenStyle == ScreenStyle.Round) {
                                         AnimatedPage(pageIndex = page, pagerState = pagerState, content = pageContent)
                                     } else {
                                         pageContent()
@@ -236,6 +241,7 @@ fun PomodoroApp(
                         entry<AboutDestination> {
                             AboutScreen(
                                 onOpenUrl = onOpenUrl,
+                                onShowLinkQr = { backStack.add(LinkQrDestination(it)) },
                                 onShowOpenSourceLicenses = { backStack.add(OpenSourceLicensesDestination) },
                                 onShowProjectLicense = { backStack.add(LicenseDetailDestination(PROJECT_LICENSE_ID)) },
                                 onShowDonationQr = { backStack.add(DonationQrDestination) },
@@ -245,6 +251,9 @@ fun PomodoroApp(
                         }
                         entry<DonationQrDestination> {
                             TipCodeScreen(onNavigateBack = navigateBack)
+                        }
+                        entry<LinkQrDestination> { destination ->
+                            LinkQrScreen(url = destination.url, onNavigateBack = navigateBack)
                         }
                         entry<OpenSourceLicensesDestination> {
                             OpenSourceLicensesScreen(
