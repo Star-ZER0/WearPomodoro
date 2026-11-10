@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("cc.star0.wear.lib.cnwearoverlay")
+    id("cc.star0.wear.lib.cnwearoverlay") version "1.2.2"
 }
 
 val releaseSigningEnvironment = listOf(

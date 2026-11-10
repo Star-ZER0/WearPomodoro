@@ -4,7 +4,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-    includeBuild("cnwearoverlay")
 }
 
 plugins {
